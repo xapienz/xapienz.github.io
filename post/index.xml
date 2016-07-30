@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on привет, как дела?</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on привет, как дела?</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru-RU</language>
+    <lastBuildDate>Wed, 30 Jul 2014 20:22:09 +0600</lastBuildDate>
+    <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Нажать на &#34;закрытом&#34; экране в Android</title>
+      <link>/2014/07/30/press-on-closed/</link>
+      <pubDate>Wed, 30 Jul 2014 20:22:09 +0600</pubDate>
+      
+      <guid>/2014/07/30/press-on-closed/</guid>
+      <description>&lt;p&gt;Как вы думаете, возможно ли пользователем (то есть не программным вызовом метода, а именно собственным пальчиком) нажать на экране приложения, когда оно не считается активным, не ожидает ввода да и вообще потенциально считается закрытым?&lt;/p&gt;
+
+&lt;p&gt;Занимаясь обработкой нажатий в Android, столкнулся с интересной проблемой.&lt;br /&gt;
+Как известно, любая Activity проходит &lt;a href=&#34;http://developer.android.com/guide/components/activities.html#Lifecycle&#34;&gt;следующий жизненный цикл&lt;/a&gt;: created → started → resumed → paused(=started) → stopped(=created) → destroyed.&lt;/p&gt;
+
+&lt;p&gt;Иногда у программистов возникает непонимание, чем отличаются состояния paused и resumed (да и я не всегда могу сразу решить, какой из методов: onStart или onResume — лучше выбрать для написания какой-то части логики) и что может произойти во временном промежутке между этими состояниями (рассматривается именно случай перехода активности между состояниями, а не перекрытие её другими активностями, когда состояния становятся легко различимы). На самом деле на глаз эти состояния отличить легко. Например, при нажатии Home активити сворачивается и в процессе анимации сворачивания она уже paused, но ещё не stopped.&lt;/p&gt;
+
+&lt;p&gt;Именно об этом процессе (не анимации, а переходе) сейчас и будет идти речь.&lt;/p&gt;
+
+&lt;p&gt;Возможно (и скорее всего), описываемое ниже поведение является багом Android, но оно существует, поэтому с ним нужно мириться.&lt;/p&gt;
+
+&lt;p&gt;Создадим проект с одной активностью, добавим в него ListView, создадим следующий обработчик нажатий на элемент:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView&amp;lt;?&amp;gt; adapterView, View view, int i, long l) {
+        Log.d(TAG, &amp;quot;onItemClick&amp;quot;);
+    }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Добавим обработчики колбеков активности onPause и onStop:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Override
+protected void onPause() {
+    super.onPause();
+    Log.d(TAG, &amp;quot;onPause&amp;quot;);
+}
+
+@Override
+protected void onStop() {
+    super.onStop();
+    Log.d(TAG, &amp;quot;onStop&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;А теперь произведём следующие манипуляции: нажмём пальцем на любой элемент списка и не отпуская его свернём приложение кнопкой Home. В процессе анимации сворачивания отпустим палец.
+В логе появятся следующие строчки:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;onPause
+onItemClick
+onStop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Получилось, что пункт списка был нажат на экране, который не считается активным и не ожидает пользовательского ввода.&lt;/p&gt;
+
+&lt;p&gt;Поэтому необходимо быть осторожным и не стоит полагаться на то, что активность ещё открыта, когда производится нажатие.&lt;br /&gt;
+На этом всё.&lt;/p&gt;
+
+&lt;p&gt;P.S. Это легко повторяется с нажатием на элементы списка, но не работает с нажатием на обычные кнопки.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Экспорт в apklib одной командой</title>
+      <link>/2014/01/14/make-apklib/</link>
+      <pubDate>Tue, 14 Jan 2014 16:35:32 +0600</pubDate>
+      
+      <guid>/2014/01/14/make-apklib/</guid>
+      <description>&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/bash
+if [ ! -f build.xml ]; then
+    android update lib-project -p .
+fi
+zip -9 ${PWD##*/}.apklib -r libs src res \
+    AndroidManifest.xml build.xml build.gradle project.properties
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Впихнуть невпихуемое, или кратко о type erasure в Java на примере</title>
+      <link>/2013/12/01/erasure/</link>
+      <pubDate>Sun, 01 Dec 2013 00:53:42 +0600</pubDate>
+      
+      <guid>/2013/12/01/erasure/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;../img/slon2u.jpg&#34;&gt;&lt;img src=&#34;../img/slon2u-150x150.jpg#right&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Type erasure (стирание типов) в Java — это такой однажды вставленный в язык костыль для поддержки generics — параметризации типов у классов/методов. Нужен он был для совместимости байткода с предыдущими версиями Java, а заключается он в том, что проверка на соответствие типов данных в generics производится исключительно во время компиляции, а не во время выполнения.&lt;br /&gt;
+Из этого следует то, что можно обхитрить систему во время компиляции и попробовать этим воспользоваться для запутывания самих себя в рантайме.&lt;/p&gt;
+
+&lt;p&gt;Итак, код.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class Foo&amp;lt;T&amp;gt; {
+    T value1, value2;
+
+    public void print() {
+        System.out.println(value1);
+        System.out.println(value2);
+    }
+}
+
+public static &amp;lt;T&amp;gt; Foo&amp;lt;T&amp;gt; create(Object o1, Object o2) {
+    Foo&amp;lt;T&amp;gt; result = new Foo&amp;lt;T&amp;gt;();
+    result.value1 = (T) o1;
+    result.value2 = (T) o2;
+    return result;
+}
+
+public static void main(String[] args) {
+    Double pi = 3.14;
+    String hello = &amp;quot;hello&amp;quot;;
+    Foo&amp;lt;Integer&amp;gt; test = create(pi, hello);
+    test.print();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Суть кода: создаём объект класса Foo&lt;Integer&gt; с двумя членами типа Integer, помещаем в них объекты типа Double и String и пытаемся их вывести на экран.&lt;br /&gt;
+Логично предположить, что приложение ругнётся на этот код, так как несоответствие типов данных налицо. Однако же результатом работы будет следующий вывод:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;3.14
+hello
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Что же случилось? Стёрлись типы. На самом деле, во время компиляции код преобразовался к виду:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class Foo {
+    Object value1, value2;
+    ...
+}
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Публикация файлов на Яндекс.Диск в KDE</title>
+      <link>/2013/10/07/yandex-floppy/</link>
+      <pubDate>Mon, 07 Oct 2013 14:13:46 +0600</pubDate>
+      
+      <guid>/2013/10/07/yandex-floppy/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../img/1255336985_34-150x150.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Если вдруг ты линуксоид и используешь KDE, то есть простой способ получать ссылки на файлики для того, чтобы делиться ими с друзьями и коллегами.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Что это и как:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;переносим мышкой файл на значок, получаем ссылку, копируем её, куда хотим.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Техническая сторона:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;перенаправляем путь к выбранному файлу в &amp;ldquo;yandex-disk publish&amp;rdquo;, получаем ссылку, выводим её на экран.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Что нужно:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;плазмоид &lt;a href=&#34;http://kde-look.org/content/show.php?content=100348&#34;&gt;magic folder&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;установленный клиент &lt;a href=&#34;https://disk.yandex.ru/download/&#34;&gt;Yandex.Disk для Linux&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Что делаем:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;создаём скрипт для публикации файла и вывода полученной ссылки пользователю, делаем его executable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/sh
+src=&amp;quot;$1&amp;quot;
+kdialog --passivepopup &amp;quot;$src&amp;quot; &amp;gt;&amp;gt; /dev/null
+dest=$(yandex-disk publish &amp;quot;$src&amp;quot;)
+kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&amp;gt; /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;добавляем плазмоид magic folder на панель/рабочий стол;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;в настройках &amp;ldquo;волшебной папки&amp;rdquo; создаём правило *** → ~/path/to/script.sh** (созданный в первом пункте) и ставим галочку &amp;ldquo;Destiny is a Script&amp;rdquo;;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;меняем иконку &amp;ldquo;волшебной папки&amp;rdquo; на значок диска;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;пользуемся.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Как происходит процесс получения ссылки:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;перетаскиваем любой файл из файлового менеджера на созданную &amp;ldquo;волшебную папку&amp;rdquo;;&lt;br /&gt;
+в виде системной нотификации показывается исходное название файла для того, чтобы просто видеть, что процесс начался;&lt;/li&gt;
+&lt;li&gt;если файл не лежит на диске, то он копируется в корень диска (этим занимается yandex-disk publish);&lt;/li&gt;
+&lt;li&gt;выводится текстовое сообщение, откуда можно скопировать ссылку.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Видео:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;iframe width=&#34;420&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/D_OEqjkMqWA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;strong&gt;Pros:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;вроде работает;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Cons:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;если файл большой и находится не в каталоге яндекс.диска, то можно ждать появления ссылки очень долго.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Клонированный календарик</title>
+      <link>/2013/09/18/dolly/</link>
+      <pubDate>Wed, 18 Sep 2013 22:10:25 +0600</pubDate>
+      
+      <guid>/2013/09/18/dolly/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../img/64.H5.002-150x150.jpg#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Продолжаю уже ставшей традиционной цепочку постов о календариках (уже второй пост!).&lt;br /&gt;
+Сначала была &lt;a href=&#34;../2013/07/01/children/&#34;&gt;загадка для детей&lt;/a&gt;. Теперь загадка для повзрослевших. Тех, кто просто пишет на Java (или хотя бы в глаза видел хоть раз строчку import java.util.*) и не интересуется внутренностями какого-то там андроида и дальвика.&lt;/p&gt;
+
+&lt;p&gt;Возьмём такой простенький код. Считаем, что текущая таймзона — Москва. Хотя сработает для любых других, кроме UTC.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;TimeZone utc = TimeZone.getTimeZone(&amp;quot;UTC&amp;quot;);
+
+Calendar calendar = Calendar.getInstance();
+calendar.set(2013, Calendar.AUGUST, 14, 0, 0, 0);
+
+Calendar when1 = (Calendar) calendar.clone();
+when1.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when1.getTime());
+
+Calendar when2 = (Calendar) calendar.clone();
+when2.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when2.getTime());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Краткое описание: создаём объект календаря с 14 августа 2013 года, дважды его клонируем, в двух клонах меняем таймзону на UTC и выводим полученное.&lt;/p&gt;
+
+&lt;p&gt;Что же он выведет на экран?&lt;/p&gt;
+
+&lt;p&gt;Вот что:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-none&#34;&gt;Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 04:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Необычна вторая строка. Почему-то время не такое, как везде.&lt;/p&gt;
+
+&lt;p&gt;Причина следующая (&lt;a href=&#34;http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html&#34;&gt;пруф&lt;/a&gt;):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;set(f, value) changes calendar field f to value. In addition, it sets an internal member variable to indicate that calendar field f has been changed. Although calendar field f is changed immediately, the calendar&amp;rsquo;s time value in milliseconds is not recomputed until the next call to get(), getTime(), getTimeInMillis(), add(), or roll() is made.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Кратко по-русски: изменение полей в календаре ленивое и сразу не пересчитывает внутреннее состояние (миллисекунды с ~ начала 1970 года) до тех пор, пока не произойдёт попытка что-то из него прочитать.&lt;/p&gt;
+
+&lt;p&gt;А вот то, что из-за вызова clone() потерялась некоторая информация о том, что было изменено и не пересчиталось — баг :)&lt;/p&gt;
+
+&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Октокот Путина</title>
+      <link>/2013/09/16/8cat/</link>
+      <pubDate>Mon, 16 Sep 2013 14:10:15 +0600</pubDate>
+      
+      <guid>/2013/09/16/8cat/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;../img/putin.png&#34;&gt;&lt;img src=&#34;../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Много способов узнать, насколько много</title>
+      <link>/2013/08/13/tldr/</link>
+      <pubDate>Tue, 13 Aug 2013 18:48:25 +0600</pubDate>
+      
+      <guid>/2013/08/13/tldr/</guid>
+      <description>&lt;p&gt;Разные контейнеры/коллекции разных объектов имеют разные интерфейсы доступа. Это нормально. Но часто в произвольный момент можно позабыть, какой из методов необходимо использовать для узнавания количества элементов, содержащихся в этом нечто.&lt;/p&gt;
+
+&lt;p&gt;Итак, поехали.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Простой массив&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;int [] array = new int[10];
+int length = array.length;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Здесь .length — даже не метод. Он выглядит как простое публичное поле класса.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;org.json.JSONArray&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;JSONArray jsonArray = new JSONArray();
+int length = jsonArray.length();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;А вот здесь length() - уже метод)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;java.util.List&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;Integer&amp;gt;();
+int length = list.size();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;android.widget.Adapter&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Adapter adapter = new ArrayAdapter&amp;lt;Integer&amp;gt;(getContext(), android.R.layout.simple_list_item_1, new int[10]);
+int length = adapter.getCount();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;java.lang.reflect.Array&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;int [] array = new int[10];
+int length = Array.getLength(array);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Хоть это и не класс, содержащий в себе что-то, но метод для определения длины массива он содержит =)&lt;/p&gt;
+
+&lt;p&gt;В общем, если погуглить и постараться, то список можно продолжать =)&lt;br /&gt;
+Найдутся length, size, count в разных комбинациях с префиксом get и без.&lt;/p&gt;
+
+&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Прошиваем RK3188 из Linux</title>
+      <link>/2013/08/12/sewing/</link>
+      <pubDate>Mon, 12 Aug 2013 18:27:19 +0600</pubDate>
+      
+      <guid>/2013/08/12/sewing/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../img/sewing.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Возникла необходимость обновить прошивку на планшете Cube U30GT2, работающем на известном китайском SoC Rockchip 3188 (RK3188). Это продолжение линейки RK3066, которая была популярна примерно в прошлом году.&lt;/p&gt;
+
+&lt;p&gt;Однако приложений для прошивки хоть и два, но они оба для ОС Windows (это RKAndroidTool и Rockchip Batch Tool). Раньше в таких случаях я выполнял обновление firmware из виртуалки — VirtualBox с запущенной WinXP, но это неинтересно).&lt;/p&gt;
+
+&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Итак, что имеется со стороны автора прошивки&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Архив, называемый &lt;strong&gt;Firmware&lt;/strong&gt; — суррогат прошивки, главной функцией которого является изменение структуры разделов флеш-памяти (MTD). Содержит основные компоненты: parameter — файл с метаданными о разбивке на разделы, boot.img — загрузчик, recovery.img — образ CWM Recovery, kernel.img — образ ядра linux.&lt;/li&gt;
+&lt;li&gt;Архив с собственно прошивкой — образ загрузчика, образ ядра и набор системных файлов (приложения Android).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Дополнительные приложения, которые сначала нагуглились, а потом понадобились&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;rkflashkit&lt;/strong&gt;: &lt;a href=&#34;https://github.com/linuxerwang/rkflashkit&#34;&gt;https://github.com/linuxerwang/rkflashkit&lt;/a&gt;. Графическое приложение для заливки образов во флеш-память устройства.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;rkflashtool&lt;/strong&gt;: &lt;a href=&#34;https://github.com/Galland/rkflashtool_rk3066&#34;&gt;https://github.com/Galland/rkflashtool_rk3066&lt;/a&gt;. Консольная утилита для ручной заливки образов во флеш-память. Отличается от пункта 1 тем, что мы сами можем задавать смещения, по которым нужно произвести запись.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;rksp&lt;/strong&gt;: &lt;a href=&#34;https://github.com/ttz642t/rksp&#34;&gt;https://github.com/ttz642t/rksp&lt;/a&gt;. Полезная утилита для генерации PARM-образа (метаданные о разбивке памяти) из файла parameter.
+Перед запуском любого из этих приложений его надо скомпилировать ^_^ Градус красноглазия повышен.
+Также нужен установленный &lt;strong&gt;adb&lt;/strong&gt; (Android Debug Bridge). У кого нет — марш на &lt;a href=&#34;http://developer.android.com&#34;&gt;developer.android.com&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Что же нужно сделать для обновления прошивки&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Внимание: делайте бэкапы, всё выполняется на свой страх и риск. При получении кирпича я не виноват :)&lt;/p&gt;
+
+&lt;p&gt;Заходим в bootloader-режим на устройстве одним из двух способов:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;adb reboot-bootloader
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;или просто выключаем планшет, зажимаем &amp;ldquo;громкость вверх&amp;rdquo; и вставляем usb-кабель. На экране ничего не будет, но проверить наличие подключенного планшета можно командой &lt;code&gt;lsusb&lt;/code&gt;. В положительном случае должна появиться строчка, содержащая id устройства. Для Cube U30GT2 это &lt;code&gt;2207:0010&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Сначала ставим Firmware&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Генерируем parm.img, используя rksp, следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;./rkcrc.pl -p -i parameter -o parm.img
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Заливаем его на устройство следующей последовательностью команд:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;./rkflashtool w 0x0 1 &amp;lt; parm.img 
+./rkflashtool w 0x20 1 &amp;lt; parm.img 
+./rkflashtool w 0x40 1 &amp;lt; parm.img 
+./rkflashtool w 0x60 1 &amp;lt; parm.img 
+./rkflashtool w 0x80 1 &amp;lt; parm.img
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Говорят, что нужно записывать parm.img сразу по пяти оффсетам (см., например, &lt;a href=&#34;http://habrahabr.ru/post/147793/&#34;&gt;тут&lt;/a&gt;), но мне кажется, что хватит только первой строчки. В любом случае, можно попробовать и так и так :)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Запускаем rkflashkit и отправляем на устройство образы boot.img, kernel.img, misc.img и recovery.img из архива Firmware. Для этого нужный образ, соответствующий ему раздел и нажимаем кнопку &amp;ldquo;Flash Image&amp;rdquo;. Можно, в принципе, сделать это и руками, используя rkflashtool.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;У recovery.img отдельная миссия. ClockworkMod Recovery — это специальная мини-ос, позволяющая загружать основную ОС, производить над ней какие-либо действия (обновлять, удалять, стирать данные, etc.). Стоит посмотреть внизу статьи на подводные камни, чтобы понять, к чему может привести неправильный выбор этого образа.&lt;/p&gt;
+
+&lt;p&gt;На этом красноглазые танцы заканчиваются.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Затем ставим саму прошивку&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Выключаем девайс, включаем его заново, зажав одновременно Vol+ и Power, попадаем в CWM Recovery. Выбираем пункт &amp;ldquo;Install zip from sideload&amp;rdquo;. И вводим команду типа такой:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;adb sideload update.zip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;где update.zip - файл с прошивкой.
+Ждём. Дожидаемся, выбираем reboot и получаем рабочий андроид :)&lt;/p&gt;
+
+&lt;p&gt;Получается всё не сложнее, чем в windows.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Подводные камни&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;На странице на форуме 4pda, посвящённой прошивке U30GT2, предлагается к установке одна из сборок CWM Recovery. Тут: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=160#entry22000603&#34;&gt;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=160#entry22000603&lt;/a&gt;&lt;br /&gt;
+Этот вариант использовать не надо. Почему? Потому что при заливке этого рекавери в устройство не удастся установить прошивку. Оно будет думать, что девайс — rk3066 (а не rk3188) — и отказываться принимать прошивки. Достаточен CWMR из Firmware.&lt;/li&gt;
+&lt;li&gt;Если что-то сделать не так, можно получить кирпич. Хотя, насколько я понял, убить его окончательно, если не ударить о стол/молоток/асфальт, не получится.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Использованная литература&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Google&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Вот это поворот</title>
+      <link>/2013/08/02/rotation/</link>
+      <pubDate>Fri, 02 Aug 2013 00:29:50 +0600</pubDate>
+      
+      <guid>/2013/08/02/rotation/</guid>
+      <description>&lt;p&gt;Во вторник вечером на хабре появилась статья про квайны: &lt;a href=&#34;http://habrahabr.ru/post/188378/&#34;&gt;http://habrahabr.ru/post/188378/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;После этого я написал в свой бложик свою &lt;a href=&#34;../2013/07/30/qui_ine/&#34;&gt;статейку&lt;/a&gt; на ту же тему, начинающуюся с ссылки на исходный текст. И заканчивающуюся отсылкой к книжке &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Вчера (в четверг) на хабре появилась вторая статья того же автора (&lt;a href=&#34;http://habrahabr.ru/post/188552/&#34;&gt;http://habrahabr.ru/post/188552/&lt;/a&gt;), начинающаяся, внезапно, ссылками на эту же самую книжку.&lt;/p&gt;
+
+&lt;p&gt;Либо автор меня прочитал, либо интересное совпадение.&lt;/p&gt;
+
+&lt;p&gt;У меня всё.&lt;br /&gt;
+И паранойя)&lt;/p&gt;
+
+&lt;p&gt;UPD: статистика вордпресса мне как бы намекнула, что автор статьи на хабре ко мне заходил)&lt;br /&gt;
+Привет, &lt;a href=&#34;http://habrahabr.ru/users/gromozeka1980/&#34;&gt;gromozeka1980&lt;/a&gt;! :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Оу май квайн</title>
+      <link>/2013/07/30/qui_ine/</link>
+      <pubDate>Tue, 30 Jul 2013 22:22:20 +0600</pubDate>
+      
+      <guid>/2013/07/30/qui_ine/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../img/pythocat.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Прочитал тут статейку на хабре про квайны: &lt;a href=&#34;http://habrahabr.ru/post/188378/&#34;&gt;http://habrahabr.ru/post/188378/&lt;/a&gt;&lt;br /&gt;
+Решил размяться — написать свой квайн.&lt;/p&gt;
+
+&lt;p&gt;Для тех, кто не в курсе. Квайн — это программа, которая пишет саму себя. Ну или более сложный случай: пишет другую программу на другом языке, которая тоже запускается и пишет ещё какую-то программу. И так далее. В итоге можно когда-то вернуться к исходному коду.&lt;/p&gt;
+
+&lt;p&gt;Первым делом я осилил свой квайн на C++. Он простой.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt; 
+int main() {
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %c int main() { char data [] = %c%s%c; printf(data, 10, 34, data, 34); return 0;}&amp;quot;;
+  printf(data, 10, 34, data, 34);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Символы 10 и 34 — это перевод строки и двойная кавычка соответственно. Понадобилось вставить в прямом виде, чтобы при многократных запусках экранирование не сползало.&lt;/p&gt;
+
+&lt;p&gt;Затем я решил добавить немного питона. Пользуясь статьёй на хабре.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+void p(char * pdata, char * s) {
+  printf(pdata, 34, s, 34);
+}
+int main() {
+  char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;;
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %c void p(char * pdata, char *s) { printf(pdata, 34, s, 34); } int main() { char pdata [] = %c%s%c; char data [] = %c%s%c; printf(data, 10, 34, pdata, 34, 34, data, 34); return 0;}&amp;quot;;
+  printf(data, 10, 34, pdata, 34, 34, data, 34);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Как я понял после запуска, я совсем забыл про питон %) И это тоже оказался просто C++→C++-квайнчик.&lt;/p&gt;
+
+&lt;p&gt;После долгих и мучительных десятиминутных размышлений я выкинул метод &lt;code&gt;p()&lt;/code&gt;, который генерирует питонокод, и влепил кусочки кода прямо в main.&lt;br /&gt;
+Получилось так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+int main() {
+  char ps [] = {92, 110, 0};    // %s
+  char pc [] = {92, 99, 0};     // %c
+  char k [] = {34, 0};          // &amp;quot;
+  char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;;
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&amp;quot;;
+  char ndata [1000];
+  sprintf(ndata, data, ps, k, pdata, k, k, data, k);
+  printf(pdata, 39, ndata, 39);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Быдлокод, ага) Но работает.&lt;br /&gt;
+Генерируемый этим кодом питонокод выглядит наипростейшим образом — печатает эту самую программу.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(&#39;#include &amp;lt;stdio.h&amp;gt; \n int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;; char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&amp;quot;; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;P.S. Не обращайте внимания на комментарии в коде и переносы строк. Они после первых же компиляций исчезнут, а нужны просто для удобства чтения и кодинга.&lt;br /&gt;
+P.P.S. Люто рекомендую книжку Д. Хофштадтера (того, в честь которого назвали Леонарда в ТБВ) &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;. Там есть немного про квайны и вообще автореференцию, но книжка интересна не квайнами))&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Yet another music player: whyMusic</title>
+      <link>/2013/07/27/yet-another-music-player-whymusic/</link>
+      <pubDate>Sat, 27 Jul 2013 21:49:46 +0600</pubDate>
+      
+      <guid>/2013/07/27/yet-another-music-player-whymusic/</guid>
+      <description>&lt;p&gt;Написал свой нескучный кроссплатформенный музыкальный плеер - whyMusic.&lt;/p&gt;
+
+&lt;p&gt;Плеер — всего лишь обёртка над webview, в котором открыт сайт музыкального сервиса. Написан на Qt 4. Но можно снаружи (читай: глобальными хоткеями/командами) дёргать за кнопки &amp;ldquo;play&amp;rdquo;, &amp;ldquo;назад&amp;rdquo;, &amp;ldquo;вперёд&amp;rdquo;.&lt;br /&gt;
+Изначально задумывался как оболочка над Яндекс.Музыкой, но теперь он стал мультисервисным — сегодня я just for fun добавил поддержку Jamendo.&lt;/p&gt;
+
+&lt;p&gt;Как работает:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;запускаем приложение первый раз — оно запустится;&lt;/li&gt;
+&lt;li&gt;авторизуемся в нужном сервисе (куки пока не хранятся, поэтому каждый раз надо будет авторизоваться);&lt;/li&gt;
+&lt;li&gt;запускаем приложение второй и последующие разы, отправляя команды в аргументах командной строки, — они будут выполняться.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Пример:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ymusic &amp;amp;
+[1] 27324
+$ ./ymusic toggle
+play
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Текущий список команд: toggle (переключить паузу/воспроизведение), play, pause, back, next.&lt;/p&gt;
+
+&lt;p&gt;Как пользоваться:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Собрать под свою платформу: &lt;code&gt;qmake &amp;amp;&amp;amp; make&lt;/code&gt;. Для сборки нужен установленный Qt4 с соответствующими header&amp;rsquo;ами (на ubuntu это пакеты qt4-qmake, libqt4-dev, libqt4-webkit).&lt;/li&gt;
+&lt;li&gt;Запустить приложение, залогиниться (куки пока что не хранятся, поэтому каждый раз придётся логиниться заново).&lt;/li&gt;
+&lt;li&gt;Назначить близкой вашему сердцу утилитой горячие клавиши на запуск приложения с аргументами &amp;ldquo;play&amp;rdquo;, &amp;ldquo;back&amp;rdquo;, &amp;ldquo;next&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Использовать горячие клавиши.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Проект тут: &lt;a href=&#34;https://bitbucket.org/xapienz/whymusic&#34;&gt;https://bitbucket.org/xapienz/whymusic&lt;/a&gt;&lt;br /&gt;
+Форкайте, делитесь)&lt;/p&gt;
+
+&lt;p&gt;Скриншот вот:&lt;br /&gt;
+&lt;a href=&#34;../img/shot29.png&#34;&gt;&lt;img src=&#34;../img/shot29-300x225.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Бинарники для разных платформ будут потом, когда руки дойдут :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>mAPK 1.0 — держим несколько версий одного приложения на Android. UPD: уже в Google Play</title>
+      <link>/2013/07/23/mapk/</link>
+      <pubDate>Tue, 23 Jul 2013 23:37:15 +0600</pubDate>
+      
+      <guid>/2013/07/23/mapk/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../img/icon.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Однажды мне уже было скучно и хотелось чем-то заняться. Тогда появился проект &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.ylenta&#34;&gt;Ленточка&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Теперь же захотелось иметь несколько версий одного приложения на устройстве и переключаться между ними. Разработчики поймут.&lt;/p&gt;
+
+&lt;p&gt;Представляю вниманию читателей mAPK (multi-APK).&lt;/p&gt;
+
+&lt;p&gt;Приложение представляет собой простой список установленных приложений (за исключением помеченных как системные). Напротив каждого приложения две кнопки: &amp;ldquo;сохранить&amp;rdquo; и &amp;ldquo;загрузить&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Кнопка &amp;ldquo;сохранить&amp;rdquo; делает бэкап текущего состояния (на данный момент только каталог с данными из /data и apk-файл) приложения с введённым пользователем идентификатором. Кнопка &amp;ldquo;загрузить&amp;rdquo; предлагает список из ранее сохранённых состояний, после выбора пункта которого выбранное приложение удаляется и восстанавливается выбранное состояние.&lt;/p&gt;
+
+&lt;p&gt;На всякий случай (для забывчивых) есть галочка &amp;ldquo;Сохранять автоматически&amp;rdquo;, которая меняет поведение кнопки &amp;ldquo;загрузить&amp;rdquo; следующим образом: сначала сохраняется состояние приложения под последним выбранным идентификатором (его можно увидеть под packagename-ом приложения), а уже потом производится восстановление выбранного состояния.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Требования&lt;/strong&gt;: нужен root и установленный busybox.&lt;br /&gt;
+Никаких проверок на это (да и на другие ошибки) в приложении пока нет, поэтому возможны неожиданные результаты (а может что-то и поломаться).&lt;/p&gt;
+
+&lt;p&gt;Скриншот:&lt;br /&gt;
+&lt;a href=&#34;../img/2013-07-23-21-19-44.png&#34;&gt;&lt;img src=&#34;../img/2013-07-23-21-19-44-168x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Замечания и пожелания приветствуются.&lt;br /&gt;
+Ссылка: &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&#34;&gt;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;P.S. Если непонятно, нужно ли это Вам, то значит, что не нужно.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Поломали</title>
+      <link>/2013/07/16/broken/</link>
+      <pubDate>Tue, 16 Jul 2013 20:17:53 +0600</pubDate>
+      
+      <guid>/2013/07/16/broken/</guid>
+      <description>&lt;p&gt;Пытаюсь с особыми важными целями сделать текстовое поле &lt;a href=&#34;http://developer.android.com/reference/android/widget/AutoCompleteTextView.html&#34;&gt;AutoCompleteTextView&lt;/a&gt; нередактируемым.&lt;br /&gt;
+Простой вариант - задание свойства &lt;code&gt;android:editable=&amp;quot;false&amp;quot;&lt;/code&gt; - не работает. Оказывается, свойство &lt;code&gt;editable&lt;/code&gt; уже давным-давно deprecated (&lt;a href=&#34;http://developer.android.com/reference/android/R.attr.html#editable&#34;&gt;пруф&lt;/a&gt;) и поэтому не гарантируется его работоспособность.&lt;/p&gt;
+
+&lt;p&gt;Ну что ж, печаль. Ищем, как нужно теперь это делать.&lt;/p&gt;
+
+&lt;p&gt;Правильным ответом является задание пустого способа ввода: &lt;code&gt;android:inputType=&amp;quot;none&amp;quot;&lt;/code&gt;.  Это должно привести к тому, что компонент не даст в себя ввести текст.&lt;br /&gt;
+На деле всё гораздо хуже: &lt;a href=&#34;http://code.google.com/p/android/issues/detail?id=2854&#34;&gt;http://code.google.com/p/android/issues/detail?id=2854&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;И, как &lt;a href=&#34;http://stackoverflow.com/questions/4297763/disabling-of-edittext-in-android&#34;&gt;сказал&lt;/a&gt; товарищ Viktor Brešan на stackoverflow:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;android:editable is deprecated. android:inputType=&amp;ldquo;none&amp;rdquo; should be used instead but it contains bug and it does not work&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Будем обходиться костылями.&lt;/p&gt;
+
+&lt;p&gt;&lt;object width=&#34;350&#34; height=&#34;48&#34;&gt;&lt;param name=&#34;muz&#34; value=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;param value=&#34;noscale&#34; name=&#34;scale&#34;/&gt;&lt;param value=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; name=&#34;flashvars&#34;/&gt;&lt;embed type=&#34;application/x-shockwave-flash&#34; width=&#34;350&#34; height=&#34;48&#34; scale=&#34;noscale&#34; flashvars=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; src=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;/object&gt;&lt;div style=&#34;font-size: 11px; margin-top: 3px&#34;&gt;&lt;a href=&#34;http://music.yandex.ru/artist/41168&#34;&gt;Лампасы&lt;/a&gt; — &lt;a href=&#34;http://music.yandex.ru/track/606875/album/64726&#34;&gt;Лягушки&lt;/a&gt; на &lt;a href=&#34;http://music.yandex.ru&#34;&gt;Яндекс.Музыке&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Подключаем USB-Yota-модем к Android-планшету</title>
+      <link>/2013/07/10/yota/</link>
+      <pubDate>Wed, 10 Jul 2013 22:37:36 +0600</pubDate>
+      
+      <guid>/2013/07/10/yota/</guid>
+      <description>&lt;p&gt;Disclaimer: все действия я проводил год назад на планшете Sanei N10. На других планшетах может что-то не работать.&lt;/p&gt;
+
+&lt;p&gt;Необходимо, чтобы были доступны исходники именно того ядра, которое установлено на устройство. Также нужна поддержка USB OTG (USB Host).&lt;br /&gt;
+Я проводил действия на прошивке CyanogenMod.&lt;/p&gt;
+
+&lt;p&gt;Для работы usb-модема нужна поддержка устройств CDC (Communications Device Class) ACM (Abstract Control Model). Для этого нужен включенный в ядро модуль cdc_acm. Обычно он отключен или его нет вовсе.&lt;/p&gt;
+
+&lt;p&gt;Для добавления модуля cdc_acm его, очевидно, необходимо собрать.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Скачиваем подходящие исходники ядра. Для меня это был бранч &amp;ldquo;lichee-3.0.8-sun4i&amp;rdquo; из репозитория &amp;ldquo;git://github.com/christiantroy/linux-allwinner.git&amp;rdquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;git clone git://github.com/christiantroy/linux-allwinner.git
+git checkout lichee-3.0.8-sun4i
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Собираем ядро, попутно включая нужный модуль. Подробная информация о сборке &lt;del&gt;здесь: &lt;a href=&#34;http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source&#34;&gt;http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source&lt;/a&gt;&lt;/del&gt; теперь здесь: &lt;a href=&#34;http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source&#34;&gt;http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source&lt;/a&gt;. Файл boot.img берётся из zip-файла с прошивкой cyanogenmod.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;export CCOMPILER=[extraction directory]/bin/arm-none-eabi-
+# здесь использовался Code Sourcery ARM EABI Toolchain, но, почему-то, в отличие от инструкции в wiki, в тулчейне имеются только файлы arm-none-eabi-*
+
+scripts/extract-ikconfig boot.img &amp;gt; .config
+make ARCH=arm CROSS_COMPILE=$CCOMPILER menuconfig
+# в menuconfig ищем пункт Device Drivers — Network device support — USB Network Adapters — CDC Ethernet support, нажимаем на нём M (или пробел)
+# далее многократными Esc-Esc выходим из меню, на вопрос &amp;quot;Сохранить ли конфиг?&amp;quot; отвечаем положительно
+
+make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep &#39;processor&#39; /proc/cpuinfo | wc -l`
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Забираем cdc_ether.ko из drivers/net/usb/&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Заливаем на устройство и включаем: adb push cdc_ether.ko /sdcard/ &amp;amp;&amp;amp; adb shell insmod /sdcard/cdc_ether.ko&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Вставляем модем, заходим в Настройки - Беспроводные сети - Ещё&amp;hellip; - Ethernet. Ставим галочку &amp;ldquo;Use Ethernet&amp;rdquo;. Имеем интернет.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Не вызывайте overridable-методы в конструкторах</title>
+      <link>/2013/07/09/dontcalloverridable/</link>
+      <pubDate>Tue, 09 Jul 2013 18:00:00 +0600</pubDate>
+      
+      <guid>/2013/07/09/dontcalloverridable/</guid>
+      <description>&lt;p&gt;Эту штуку я слышал уже много раз, однако только сейчас напрямую с этим столкнулся.&lt;/p&gt;
+
+&lt;p&gt;Захотел я унаследовать EditText, чтобы реализовать в нём свои супер-пупер-киллер-фичи.&lt;br /&gt;
+Перегрузил в нём метод onTextChanged, чтобы показывать иконку-крестик при наличии текста и скрывать её при отсутствии. В нём я обращаюсь к созданному прямо в классе массиву:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private List&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;String&amp;gt;();
+@Override
+protected void onTextChanged(CharSequence text, ...) {
+  ...
+  list.add(text.toString()); 
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(Пример кода, как всегда, высосан из пальца)&lt;br /&gt;
+В итоге старт активити с этим компонентом получился таким:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;java.lang.NullPointerException
+at MyFavoriteEditText.onTextChanged(MyFavoriteEditText.java:82)
+at android.widget.TextView.setText(TextView.java:3374)
+at android.widget.TextView.setText(TextView.java:3226)
+at android.widget.EditText.setText(EditText.java:107)
+at android.widget.TextView.setText(TextView.java:3201)
+at android.widget.TextView.setTransformationMethod(TextView.java:1488)
+at android.widget.TextView.applySingleLine(TextView.java:7372)
+at android.widget.TextView.(TextView.java:1055)
+at android.widget.EditText.(EditText.java:74)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Всё почему? Всё потому, что я попытался прочитать неинициализированное поле класса. А почему оно не инициализировано? А потому что ещё не закончился вызов конструктора суперкласса.&lt;br /&gt;
+Такая грусть-пичаль.&lt;/p&gt;
+
+&lt;p&gt;Поэтому не надо доверять коду ребят из гугла, они тоже создают потенциальные проблемы, которые мне приходится обходить лишними &lt;code&gt;if(... != null) {...}&lt;/code&gt; в местах, где, казалось бы, null быть не должен.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

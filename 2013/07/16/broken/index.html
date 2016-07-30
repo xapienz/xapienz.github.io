@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Поломали | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/07/16/broken/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Поломали</h1>
+      <div class="meta">
+        Jul 16, 2013 &nbsp;
+        
+          #<a href="../../../../tags/%D0%B6%D0%B5%D0%BC%D1%87%D1%83%D0%B6%D0%B8%D0%BD%D1%8B-android">жемчужины Android</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Пытаюсь с особыми важными целями сделать текстовое поле <a href="http://developer.android.com/reference/android/widget/AutoCompleteTextView.html">AutoCompleteTextView</a> нередактируемым.<br />
+Простой вариант - задание свойства <code>android:editable=&quot;false&quot;</code> - не работает. Оказывается, свойство <code>editable</code> уже давным-давно deprecated (<a href="http://developer.android.com/reference/android/R.attr.html#editable">пруф</a>) и поэтому не гарантируется его работоспособность.</p>
+
+<p>Ну что ж, печаль. Ищем, как нужно теперь это делать.</p>
+
+<p>Правильным ответом является задание пустого способа ввода: <code>android:inputType=&quot;none&quot;</code>.  Это должно привести к тому, что компонент не даст в себя ввести текст.<br />
+На деле всё гораздо хуже: <a href="http://code.google.com/p/android/issues/detail?id=2854">http://code.google.com/p/android/issues/detail?id=2854</a></p>
+
+<p>И, как <a href="http://stackoverflow.com/questions/4297763/disabling-of-edittext-in-android">сказал</a> товарищ Viktor Brešan на stackoverflow:</p>
+
+<blockquote>
+<p>android:editable is deprecated. android:inputType=&ldquo;none&rdquo; should be used instead but it contains bug and it does not work</p>
+</blockquote>
+
+<p>Будем обходиться костылями.</p>
+
+<p><object width="350" height="48"><param name="muz" value="http://music.yandex.ru/embed/606875/track.swf"/><param value="noscale" name="scale"/><param value="bg-color=%23F2F2F2&amp;text-color=%23777777&amp;hover-text-color=%23000000" name="flashvars"/><embed type="application/x-shockwave-flash" width="350" height="48" scale="noscale" flashvars="bg-color=%23F2F2F2&amp;text-color=%23777777&amp;hover-text-color=%23000000" src="http://music.yandex.ru/embed/606875/track.swf"/></object><div style="font-size: 11px; margin-top: 3px"><a href="http://music.yandex.ru/artist/41168">Лампасы</a> — <a href="http://music.yandex.ru/track/606875/album/64726">Лягушки</a> на <a href="http://music.yandex.ru">Яндекс.Музыке</a></div></p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '57 http:\/\/blog.xapienz.ru\/?p=57';
+    var disqus_title = 'Поломали';
+    var disqus_url = '\/2013\/07\/16\/broken\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/07/10/yota/" rel="prev">Подключаем USB-Yota-модем к Android-планшету</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/07/23/mapk/" rel="next">mAPK 1.0 — держим несколько версий одного приложения на Android. UPD: уже в Google Play</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

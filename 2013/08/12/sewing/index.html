@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Прошиваем RK3188 из Linux | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/08/12/sewing/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Прошиваем RK3188 из Linux</h1>
+      <div class="meta">
+        Aug 12, 2013 &nbsp;
+        
+          #<a href="../../../../tags/android">android</a>&nbsp;
+        
+          #<a href="../../../../tags/linux">linux</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p><img src="../../../../img/sewing.png#right" alt="" /></p>
+
+<p>Возникла необходимость обновить прошивку на планшете Cube U30GT2, работающем на известном китайском SoC Rockchip 3188 (RK3188). Это продолжение линейки RK3066, которая была популярна примерно в прошлом году.</p>
+
+<p>Однако приложений для прошивки хоть и два, но они оба для ОС Windows (это RKAndroidTool и Rockchip Batch Tool). Раньше в таких случаях я выполнял обновление firmware из виртуалки — VirtualBox с запущенной WinXP, но это неинтересно).</p>
+
+<p>Все действия выполнялись для <a href="http://4pda.ru/forum/index.php?showtopic=458533&amp;st=300#entry22298604">прошивки от ImaSoft</a>, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.</p>
+
+<p><strong>Итак, что имеется со стороны автора прошивки</strong>:</p>
+
+<ol>
+<li>Архив, называемый <strong>Firmware</strong> — суррогат прошивки, главной функцией которого является изменение структуры разделов флеш-памяти (MTD). Содержит основные компоненты: parameter — файл с метаданными о разбивке на разделы, boot.img — загрузчик, recovery.img — образ CWM Recovery, kernel.img — образ ядра linux.</li>
+<li>Архив с собственно прошивкой — образ загрузчика, образ ядра и набор системных файлов (приложения Android).</li>
+</ol>
+
+<p><strong>Дополнительные приложения, которые сначала нагуглились, а потом понадобились</strong>:</p>
+
+<ol>
+<li><strong>rkflashkit</strong>: <a href="https://github.com/linuxerwang/rkflashkit">https://github.com/linuxerwang/rkflashkit</a>. Графическое приложение для заливки образов во флеш-память устройства.</li>
+<li><strong>rkflashtool</strong>: <a href="https://github.com/Galland/rkflashtool_rk3066">https://github.com/Galland/rkflashtool_rk3066</a>. Консольная утилита для ручной заливки образов во флеш-память. Отличается от пункта 1 тем, что мы сами можем задавать смещения, по которым нужно произвести запись.</li>
+<li><strong>rksp</strong>: <a href="https://github.com/ttz642t/rksp">https://github.com/ttz642t/rksp</a>. Полезная утилита для генерации PARM-образа (метаданные о разбивке памяти) из файла parameter.
+Перед запуском любого из этих приложений его надо скомпилировать ^_^ Градус красноглазия повышен.
+Также нужен установленный <strong>adb</strong> (Android Debug Bridge). У кого нет — марш на <a href="http://developer.android.com">developer.android.com</a>.</li>
+</ol>
+
+<p><strong>Что же нужно сделать для обновления прошивки</strong>.</p>
+
+<p>Внимание: делайте бэкапы, всё выполняется на свой страх и риск. При получении кирпича я не виноват :)</p>
+
+<p>Заходим в bootloader-режим на устройстве одним из двух способов:</p>
+
+<pre><code class="language-bash">adb reboot-bootloader
+</code></pre>
+
+<p>или просто выключаем планшет, зажимаем &ldquo;громкость вверх&rdquo; и вставляем usb-кабель. На экране ничего не будет, но проверить наличие подключенного планшета можно командой <code>lsusb</code>. В положительном случае должна появиться строчка, содержащая id устройства. Для Cube U30GT2 это <code>2207:0010</code>.</p>
+
+<p><strong>Сначала ставим Firmware</strong>.</p>
+
+<ol>
+<li><p>Генерируем parm.img, используя rksp, следующим образом:</p>
+
+<pre><code class="language-bash">./rkcrc.pl -p -i parameter -o parm.img
+</code></pre></li>
+
+<li><p>Заливаем его на устройство следующей последовательностью команд:</p>
+
+<pre><code class="language-bash">./rkflashtool w 0x0 1 &lt; parm.img 
+./rkflashtool w 0x20 1 &lt; parm.img 
+./rkflashtool w 0x40 1 &lt; parm.img 
+./rkflashtool w 0x60 1 &lt; parm.img 
+./rkflashtool w 0x80 1 &lt; parm.img
+</code></pre>
+
+<p>Говорят, что нужно записывать parm.img сразу по пяти оффсетам (см., например, <a href="http://habrahabr.ru/post/147793/">тут</a>), но мне кажется, что хватит только первой строчки. В любом случае, можно попробовать и так и так :)</p></li>
+
+<li><p>Запускаем rkflashkit и отправляем на устройство образы boot.img, kernel.img, misc.img и recovery.img из архива Firmware. Для этого нужный образ, соответствующий ему раздел и нажимаем кнопку &ldquo;Flash Image&rdquo;. Можно, в принципе, сделать это и руками, используя rkflashtool.</p></li>
+</ol>
+
+<p>У recovery.img отдельная миссия. ClockworkMod Recovery — это специальная мини-ос, позволяющая загружать основную ОС, производить над ней какие-либо действия (обновлять, удалять, стирать данные, etc.). Стоит посмотреть внизу статьи на подводные камни, чтобы понять, к чему может привести неправильный выбор этого образа.</p>
+
+<p>На этом красноглазые танцы заканчиваются.</p>
+
+<p><strong>Затем ставим саму прошивку</strong></p>
+
+<p>Выключаем девайс, включаем его заново, зажав одновременно Vol+ и Power, попадаем в CWM Recovery. Выбираем пункт &ldquo;Install zip from sideload&rdquo;. И вводим команду типа такой:</p>
+
+<pre><code class="language-bash">adb sideload update.zip
+</code></pre>
+
+<p>где update.zip - файл с прошивкой.
+Ждём. Дожидаемся, выбираем reboot и получаем рабочий андроид :)</p>
+
+<p>Получается всё не сложнее, чем в windows.</p>
+
+<p><strong>Подводные камни</strong>:</p>
+
+<ol>
+<li>На странице на форуме 4pda, посвящённой прошивке U30GT2, предлагается к установке одна из сборок CWM Recovery. Тут: <a href="http://4pda.ru/forum/index.php?showtopic=458533&amp;st=160#entry22000603">http://4pda.ru/forum/index.php?showtopic=458533&amp;st=160#entry22000603</a><br />
+Этот вариант использовать не надо. Почему? Потому что при заливке этого рекавери в устройство не удастся установить прошивку. Оно будет думать, что девайс — rk3066 (а не rk3188) — и отказываться принимать прошивки. Достаточен CWMR из Firmware.</li>
+<li>Если что-то сделать не так, можно получить кирпич. Хотя, насколько я понял, убить его окончательно, если не ударить о стол/молоток/асфальт, не получится.</li>
+</ol>
+
+<p><strong>Использованная литература</strong>:</p>
+
+<ol>
+<li>Google</li>
+</ol>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '129 http:\/\/blog.xapienz.ru\/?p=129';
+    var disqus_title = 'Прошиваем RK3188 из Linux';
+    var disqus_url = '\/2013\/08\/12\/sewing\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/08/02/rotation/" rel="prev">Вот это поворот</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/08/13/tldr/" rel="next">Много способов узнать, насколько много</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

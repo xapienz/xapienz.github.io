@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on привет, как дела?</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in Linux on привет, как дела?</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru-RU</language>
+    <lastBuildDate>Tue, 14 Jan 2014 16:35:32 +0600</lastBuildDate>
+    <atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Экспорт в apklib одной командой</title>
+      <link>/2014/01/14/make-apklib/</link>
+      <pubDate>Tue, 14 Jan 2014 16:35:32 +0600</pubDate>
+      
+      <guid>/2014/01/14/make-apklib/</guid>
+      <description>&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/bash
+if [ ! -f build.xml ]; then
+    android update lib-project -p .
+fi
+zip -9 ${PWD##*/}.apklib -r libs src res \
+    AndroidManifest.xml build.xml build.gradle project.properties
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Публикация файлов на Яндекс.Диск в KDE</title>
+      <link>/2013/10/07/yandex-floppy/</link>
+      <pubDate>Mon, 07 Oct 2013 14:13:46 +0600</pubDate>
+      
+      <guid>/2013/10/07/yandex-floppy/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../../img/1255336985_34-150x150.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Если вдруг ты линуксоид и используешь KDE, то есть простой способ получать ссылки на файлики для того, чтобы делиться ими с друзьями и коллегами.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Что это и как:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;переносим мышкой файл на значок, получаем ссылку, копируем её, куда хотим.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Техническая сторона:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;перенаправляем путь к выбранному файлу в &amp;ldquo;yandex-disk publish&amp;rdquo;, получаем ссылку, выводим её на экран.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Что нужно:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;плазмоид &lt;a href=&#34;http://kde-look.org/content/show.php?content=100348&#34;&gt;magic folder&lt;/a&gt;;&lt;/li&gt;
+&lt;li&gt;установленный клиент &lt;a href=&#34;https://disk.yandex.ru/download/&#34;&gt;Yandex.Disk для Linux&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Что делаем:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;создаём скрипт для публикации файла и вывода полученной ссылки пользователю, делаем его executable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;#!/bin/sh
+src=&amp;quot;$1&amp;quot;
+kdialog --passivepopup &amp;quot;$src&amp;quot; &amp;gt;&amp;gt; /dev/null
+dest=$(yandex-disk publish &amp;quot;$src&amp;quot;)
+kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&amp;gt; /dev/null
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;добавляем плазмоид magic folder на панель/рабочий стол;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;в настройках &amp;ldquo;волшебной папки&amp;rdquo; создаём правило *** → ~/path/to/script.sh** (созданный в первом пункте) и ставим галочку &amp;ldquo;Destiny is a Script&amp;rdquo;;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;меняем иконку &amp;ldquo;волшебной папки&amp;rdquo; на значок диска;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;пользуемся.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Как происходит процесс получения ссылки:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;перетаскиваем любой файл из файлового менеджера на созданную &amp;ldquo;волшебную папку&amp;rdquo;;&lt;br /&gt;
+в виде системной нотификации показывается исходное название файла для того, чтобы просто видеть, что процесс начался;&lt;/li&gt;
+&lt;li&gt;если файл не лежит на диске, то он копируется в корень диска (этим занимается yandex-disk publish);&lt;/li&gt;
+&lt;li&gt;выводится текстовое сообщение, откуда можно скопировать ссылку.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Видео:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;iframe width=&#34;420&#34; height=&#34;315&#34; src=&#34;//www.youtube.com/embed/D_OEqjkMqWA&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;strong&gt;Pros:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;вроде работает;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Cons:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;если файл большой и находится не в каталоге яндекс.диска, то можно ждать появления ссылки очень долго.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Прошиваем RK3188 из Linux</title>
+      <link>/2013/08/12/sewing/</link>
+      <pubDate>Mon, 12 Aug 2013 18:27:19 +0600</pubDate>
+      
+      <guid>/2013/08/12/sewing/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../../img/sewing.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Возникла необходимость обновить прошивку на планшете Cube U30GT2, работающем на известном китайском SoC Rockchip 3188 (RK3188). Это продолжение линейки RK3066, которая была популярна примерно в прошлом году.&lt;/p&gt;
+
+&lt;p&gt;Однако приложений для прошивки хоть и два, но они оба для ОС Windows (это RKAndroidTool и Rockchip Batch Tool). Раньше в таких случаях я выполнял обновление firmware из виртуалки — VirtualBox с запущенной WinXP, но это неинтересно).&lt;/p&gt;
+
+&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Итак, что имеется со стороны автора прошивки&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Архив, называемый &lt;strong&gt;Firmware&lt;/strong&gt; — суррогат прошивки, главной функцией которого является изменение структуры разделов флеш-памяти (MTD). Содержит основные компоненты: parameter — файл с метаданными о разбивке на разделы, boot.img — загрузчик, recovery.img — образ CWM Recovery, kernel.img — образ ядра linux.&lt;/li&gt;
+&lt;li&gt;Архив с собственно прошивкой — образ загрузчика, образ ядра и набор системных файлов (приложения Android).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Дополнительные приложения, которые сначала нагуглились, а потом понадобились&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;rkflashkit&lt;/strong&gt;: &lt;a href=&#34;https://github.com/linuxerwang/rkflashkit&#34;&gt;https://github.com/linuxerwang/rkflashkit&lt;/a&gt;. Графическое приложение для заливки образов во флеш-память устройства.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;rkflashtool&lt;/strong&gt;: &lt;a href=&#34;https://github.com/Galland/rkflashtool_rk3066&#34;&gt;https://github.com/Galland/rkflashtool_rk3066&lt;/a&gt;. Консольная утилита для ручной заливки образов во флеш-память. Отличается от пункта 1 тем, что мы сами можем задавать смещения, по которым нужно произвести запись.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;rksp&lt;/strong&gt;: &lt;a href=&#34;https://github.com/ttz642t/rksp&#34;&gt;https://github.com/ttz642t/rksp&lt;/a&gt;. Полезная утилита для генерации PARM-образа (метаданные о разбивке памяти) из файла parameter.
+Перед запуском любого из этих приложений его надо скомпилировать ^_^ Градус красноглазия повышен.
+Также нужен установленный &lt;strong&gt;adb&lt;/strong&gt; (Android Debug Bridge). У кого нет — марш на &lt;a href=&#34;http://developer.android.com&#34;&gt;developer.android.com&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Что же нужно сделать для обновления прошивки&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Внимание: делайте бэкапы, всё выполняется на свой страх и риск. При получении кирпича я не виноват :)&lt;/p&gt;
+
+&lt;p&gt;Заходим в bootloader-режим на устройстве одним из двух способов:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;adb reboot-bootloader
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;или просто выключаем планшет, зажимаем &amp;ldquo;громкость вверх&amp;rdquo; и вставляем usb-кабель. На экране ничего не будет, но проверить наличие подключенного планшета можно командой &lt;code&gt;lsusb&lt;/code&gt;. В положительном случае должна появиться строчка, содержащая id устройства. Для Cube U30GT2 это &lt;code&gt;2207:0010&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Сначала ставим Firmware&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Генерируем parm.img, используя rksp, следующим образом:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;./rkcrc.pl -p -i parameter -o parm.img
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Заливаем его на устройство следующей последовательностью команд:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;./rkflashtool w 0x0 1 &amp;lt; parm.img 
+./rkflashtool w 0x20 1 &amp;lt; parm.img 
+./rkflashtool w 0x40 1 &amp;lt; parm.img 
+./rkflashtool w 0x60 1 &amp;lt; parm.img 
+./rkflashtool w 0x80 1 &amp;lt; parm.img
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Говорят, что нужно записывать parm.img сразу по пяти оффсетам (см., например, &lt;a href=&#34;http://habrahabr.ru/post/147793/&#34;&gt;тут&lt;/a&gt;), но мне кажется, что хватит только первой строчки. В любом случае, можно попробовать и так и так :)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Запускаем rkflashkit и отправляем на устройство образы boot.img, kernel.img, misc.img и recovery.img из архива Firmware. Для этого нужный образ, соответствующий ему раздел и нажимаем кнопку &amp;ldquo;Flash Image&amp;rdquo;. Можно, в принципе, сделать это и руками, используя rkflashtool.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;У recovery.img отдельная миссия. ClockworkMod Recovery — это специальная мини-ос, позволяющая загружать основную ОС, производить над ней какие-либо действия (обновлять, удалять, стирать данные, etc.). Стоит посмотреть внизу статьи на подводные камни, чтобы понять, к чему может привести неправильный выбор этого образа.&lt;/p&gt;
+
+&lt;p&gt;На этом красноглазые танцы заканчиваются.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Затем ставим саму прошивку&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Выключаем девайс, включаем его заново, зажав одновременно Vol+ и Power, попадаем в CWM Recovery. Выбираем пункт &amp;ldquo;Install zip from sideload&amp;rdquo;. И вводим команду типа такой:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;adb sideload update.zip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;где update.zip - файл с прошивкой.
+Ждём. Дожидаемся, выбираем reboot и получаем рабочий андроид :)&lt;/p&gt;
+
+&lt;p&gt;Получается всё не сложнее, чем в windows.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Подводные камни&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;На странице на форуме 4pda, посвящённой прошивке U30GT2, предлагается к установке одна из сборок CWM Recovery. Тут: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=160#entry22000603&#34;&gt;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=160#entry22000603&lt;/a&gt;&lt;br /&gt;
+Этот вариант использовать не надо. Почему? Потому что при заливке этого рекавери в устройство не удастся установить прошивку. Оно будет думать, что девайс — rk3066 (а не rk3188) — и отказываться принимать прошивки. Достаточен CWMR из Firmware.&lt;/li&gt;
+&lt;li&gt;Если что-то сделать не так, можно получить кирпич. Хотя, насколько я понял, убить его окончательно, если не ударить о стол/молоток/асфальт, не получится.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Использованная литература&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Google&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Подключаем USB-Yota-модем к Android-планшету</title>
+      <link>/2013/07/10/yota/</link>
+      <pubDate>Wed, 10 Jul 2013 22:37:36 +0600</pubDate>
+      
+      <guid>/2013/07/10/yota/</guid>
+      <description>&lt;p&gt;Disclaimer: все действия я проводил год назад на планшете Sanei N10. На других планшетах может что-то не работать.&lt;/p&gt;
+
+&lt;p&gt;Необходимо, чтобы были доступны исходники именно того ядра, которое установлено на устройство. Также нужна поддержка USB OTG (USB Host).&lt;br /&gt;
+Я проводил действия на прошивке CyanogenMod.&lt;/p&gt;
+
+&lt;p&gt;Для работы usb-модема нужна поддержка устройств CDC (Communications Device Class) ACM (Abstract Control Model). Для этого нужен включенный в ядро модуль cdc_acm. Обычно он отключен или его нет вовсе.&lt;/p&gt;
+
+&lt;p&gt;Для добавления модуля cdc_acm его, очевидно, необходимо собрать.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Скачиваем подходящие исходники ядра. Для меня это был бранч &amp;ldquo;lichee-3.0.8-sun4i&amp;rdquo; из репозитория &amp;ldquo;git://github.com/christiantroy/linux-allwinner.git&amp;rdquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;git clone git://github.com/christiantroy/linux-allwinner.git
+git checkout lichee-3.0.8-sun4i
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Собираем ядро, попутно включая нужный модуль. Подробная информация о сборке &lt;del&gt;здесь: &lt;a href=&#34;http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source&#34;&gt;http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source&lt;/a&gt;&lt;/del&gt; теперь здесь: &lt;a href=&#34;http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source&#34;&gt;http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source&lt;/a&gt;. Файл boot.img берётся из zip-файла с прошивкой cyanogenmod.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;export CCOMPILER=[extraction directory]/bin/arm-none-eabi-
+# здесь использовался Code Sourcery ARM EABI Toolchain, но, почему-то, в отличие от инструкции в wiki, в тулчейне имеются только файлы arm-none-eabi-*
+
+scripts/extract-ikconfig boot.img &amp;gt; .config
+make ARCH=arm CROSS_COMPILE=$CCOMPILER menuconfig
+# в menuconfig ищем пункт Device Drivers — Network device support — USB Network Adapters — CDC Ethernet support, нажимаем на нём M (или пробел)
+# далее многократными Esc-Esc выходим из меню, на вопрос &amp;quot;Сохранить ли конфиг?&amp;quot; отвечаем положительно
+
+make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep &#39;processor&#39; /proc/cpuinfo | wc -l`
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Забираем cdc_ether.ko из drivers/net/usb/&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Заливаем на устройство и включаем: adb push cdc_ether.ko /sdcard/ &amp;amp;&amp;amp; adb shell insmod /sdcard/cdc_ether.ko&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Вставляем модем, заходим в Настройки - Беспроводные сети - Ещё&amp;hellip; - Ethernet. Ставим галочку &amp;ldquo;Use Ethernet&amp;rdquo;. Имеем интернет.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

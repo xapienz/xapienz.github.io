@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Клонированный календарик | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/09/18/dolly/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Клонированный календарик</h1>
+      <div class="meta">
+        Sep 18, 2013 &nbsp;
+        
+          #<a href="../../../../tags/java">java</a>&nbsp;
+        
+          #<a href="../../../../tags/%D1%88%D1%82%D0%BE">што</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p><img src="../../../../img/64.H5.002-150x150.jpg#right" alt="" /></p>
+
+<p>Продолжаю уже ставшей традиционной цепочку постов о календариках (уже второй пост!).<br />
+Сначала была <a href="../../../../2013/07/01/children/">загадка для детей</a>. Теперь загадка для повзрослевших. Тех, кто просто пишет на Java (или хотя бы в глаза видел хоть раз строчку import java.util.*) и не интересуется внутренностями какого-то там андроида и дальвика.</p>
+
+<p>Возьмём такой простенький код. Считаем, что текущая таймзона — Москва. Хотя сработает для любых других, кроме UTC.</p>
+
+<pre><code class="language-java">TimeZone utc = TimeZone.getTimeZone(&quot;UTC&quot;);
+
+Calendar calendar = Calendar.getInstance();
+calendar.set(2013, Calendar.AUGUST, 14, 0, 0, 0);
+
+Calendar when1 = (Calendar) calendar.clone();
+when1.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when1.getTime());
+
+Calendar when2 = (Calendar) calendar.clone();
+when2.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when2.getTime());
+</code></pre>
+
+<p>Краткое описание: создаём объект календаря с 14 августа 2013 года, дважды его клонируем, в двух клонах меняем таймзону на UTC и выводим полученное.</p>
+
+<p>Что же он выведет на экран?</p>
+
+<p>Вот что:</p>
+
+<pre><code class="language-none">Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 04:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+</code></pre>
+
+<p>Необычна вторая строка. Почему-то время не такое, как везде.</p>
+
+<p>Причина следующая (<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html">пруф</a>):</p>
+
+<blockquote>
+<p>set(f, value) changes calendar field f to value. In addition, it sets an internal member variable to indicate that calendar field f has been changed. Although calendar field f is changed immediately, the calendar&rsquo;s time value in milliseconds is not recomputed until the next call to get(), getTime(), getTimeInMillis(), add(), or roll() is made.</p>
+</blockquote>
+
+<p>Кратко по-русски: изменение полей в календаре ленивое и сразу не пересчитывает внутреннее состояние (миллисекунды с ~ начала 1970 года) до тех пор, пока не произойдёт попытка что-то из него прочитать.</p>
+
+<p>А вот то, что из-за вызова clone() потерялась некоторая информация о том, что было изменено и не пересчиталось — баг :)</p>
+
+<p>Вывод. Использование Calendar.clone() — зло.</p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '167 http:\/\/blog.xapienz.ru\/?p=167';
+    var disqus_title = 'Клонированный календарик';
+    var disqus_url = '\/2013\/09\/18\/dolly\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/09/16/8cat/" rel="prev">Октокот Путина</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/10/07/yandex-floppy/" rel="next">Публикация файлов на Яндекс.Диск в KDE</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

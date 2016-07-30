@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Подключаем USB-Yota-модем к Android-планшету | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/07/10/yota/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Подключаем USB-Yota-модем к Android-планшету</h1>
+      <div class="meta">
+        Jul 10, 2013 &nbsp;
+        
+          #<a href="../../../../tags/android">android</a>&nbsp;
+        
+          #<a href="../../../../tags/linux">linux</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Disclaimer: все действия я проводил год назад на планшете Sanei N10. На других планшетах может что-то не работать.</p>
+
+<p>Необходимо, чтобы были доступны исходники именно того ядра, которое установлено на устройство. Также нужна поддержка USB OTG (USB Host).<br />
+Я проводил действия на прошивке CyanogenMod.</p>
+
+<p>Для работы usb-модема нужна поддержка устройств CDC (Communications Device Class) ACM (Abstract Control Model). Для этого нужен включенный в ядро модуль cdc_acm. Обычно он отключен или его нет вовсе.</p>
+
+<p>Для добавления модуля cdc_acm его, очевидно, необходимо собрать.</p>
+
+<ol>
+<li><p>Скачиваем подходящие исходники ядра. Для меня это был бранч &ldquo;lichee-3.0.8-sun4i&rdquo; из репозитория &ldquo;git://github.com/christiantroy/linux-allwinner.git&rdquo;:</p>
+
+<pre><code class="language-bash">git clone git://github.com/christiantroy/linux-allwinner.git
+git checkout lichee-3.0.8-sun4i
+</code></pre></li>
+
+<li><p>Собираем ядро, попутно включая нужный модуль. Подробная информация о сборке <del>здесь: <a href="http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source">http://wiki.cyanogenmod.com/wiki/Building_Kernel_from_source</a></del> теперь здесь: <a href="http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source">http://oldwiki.cyanogenmod.org/wiki/Building_Kernel_from_source</a>. Файл boot.img берётся из zip-файла с прошивкой cyanogenmod.</p>
+
+<pre><code class="language-bash">export CCOMPILER=[extraction directory]/bin/arm-none-eabi-
+# здесь использовался Code Sourcery ARM EABI Toolchain, но, почему-то, в отличие от инструкции в wiki, в тулчейне имеются только файлы arm-none-eabi-*
+
+scripts/extract-ikconfig boot.img &gt; .config
+make ARCH=arm CROSS_COMPILE=$CCOMPILER menuconfig
+# в menuconfig ищем пункт Device Drivers — Network device support — USB Network Adapters — CDC Ethernet support, нажимаем на нём M (или пробел)
+# далее многократными Esc-Esc выходим из меню, на вопрос &quot;Сохранить ли конфиг?&quot; отвечаем положительно
+
+make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep 'processor' /proc/cpuinfo | wc -l`
+</code></pre></li>
+
+<li><p>Забираем cdc_ether.ko из drivers/net/usb/</p></li>
+
+<li><p>Заливаем на устройство и включаем: adb push cdc_ether.ko /sdcard/ &amp;&amp; adb shell insmod /sdcard/cdc_ether.ko</p></li>
+
+<li><p>Вставляем модем, заходим в Настройки - Беспроводные сети - Ещё&hellip; - Ethernet. Ставим галочку &ldquo;Use Ethernet&rdquo;. Имеем интернет.</p></li>
+</ol>
+
+<p>Оригинальный пост за моим авторством здесь: <a href="http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947">http://4pda.ru/forum/index.php?showtopic=353811&amp;view=findpost&amp;p=14150947</a></p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '50 http:\/\/blog.xapienz.ru\/?p=50';
+    var disqus_title = 'Подключаем USB-Yota-модем к Android-планшету';
+    var disqus_url = '\/2013\/07\/10\/yota\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/07/09/dontcalloverridable/" rel="prev">Не вызывайте overridable-методы в конструкторах</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/07/16/broken/" rel="next">Поломали</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

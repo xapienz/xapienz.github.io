@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Yet another music player: whyMusic | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/07/27/yet-another-music-player-whymusic/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Yet another music player: whyMusic</h1>
+      <div class="meta">
+        Jul 27, 2013 &nbsp;
+        
+          #<a href="../../../../tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8">без категории</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Написал свой нескучный кроссплатформенный музыкальный плеер - whyMusic.</p>
+
+<p>Плеер — всего лишь обёртка над webview, в котором открыт сайт музыкального сервиса. Написан на Qt 4. Но можно снаружи (читай: глобальными хоткеями/командами) дёргать за кнопки &ldquo;play&rdquo;, &ldquo;назад&rdquo;, &ldquo;вперёд&rdquo;.<br />
+Изначально задумывался как оболочка над Яндекс.Музыкой, но теперь он стал мультисервисным — сегодня я just for fun добавил поддержку Jamendo.</p>
+
+<p>Как работает:</p>
+
+<ul>
+<li>запускаем приложение первый раз — оно запустится;</li>
+<li>авторизуемся в нужном сервисе (куки пока не хранятся, поэтому каждый раз надо будет авторизоваться);</li>
+<li>запускаем приложение второй и последующие разы, отправляя команды в аргументах командной строки, — они будут выполняться.</li>
+</ul>
+
+<p>Пример:</p>
+
+<pre><code class="language-bash">$ ./ymusic &amp;
+[1] 27324
+$ ./ymusic toggle
+play
+</code></pre>
+
+<p>Текущий список команд: toggle (переключить паузу/воспроизведение), play, pause, back, next.</p>
+
+<p>Как пользоваться:</p>
+
+<ol>
+<li>Собрать под свою платформу: <code>qmake &amp;&amp; make</code>. Для сборки нужен установленный Qt4 с соответствующими header&rsquo;ами (на ubuntu это пакеты qt4-qmake, libqt4-dev, libqt4-webkit).</li>
+<li>Запустить приложение, залогиниться (куки пока что не хранятся, поэтому каждый раз придётся логиниться заново).</li>
+<li>Назначить близкой вашему сердцу утилитой горячие клавиши на запуск приложения с аргументами &ldquo;play&rdquo;, &ldquo;back&rdquo;, &ldquo;next&rdquo;.</li>
+<li>Использовать горячие клавиши.</li>
+</ol>
+
+<p>Проект тут: <a href="https://bitbucket.org/xapienz/whymusic">https://bitbucket.org/xapienz/whymusic</a><br />
+Форкайте, делитесь)</p>
+
+<p>Скриншот вот:<br />
+<a href="../../../../img/shot29.png"><img src="../../../../img/shot29-300x225.png" alt="" /></a></p>
+
+<p>Бинарники для разных платформ будут потом, когда руки дойдут :)</p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '95 http:\/\/blog.xapienz.ru\/?p=95';
+    var disqus_title = 'Yet another music player: whyMusic';
+    var disqus_url = '\/2013\/07\/27\/yet-another-music-player-whymusic\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/07/23/mapk/" rel="prev">mAPK 1.0 — держим несколько версий одного приложения на Android. UPD: уже в Google Play</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/07/30/qui_ine/" rel="next">Оу май квайн</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

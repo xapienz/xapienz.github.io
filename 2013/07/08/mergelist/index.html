@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Простой способ объединять несколько списков в один (с заголовками) | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/07/08/mergelist/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Простой способ объединять несколько списков в один (с заголовками)</h1>
+      <div class="meta">
+        Jul 8, 2013 &nbsp;
+        
+          #<a href="../../../../tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8">без категории</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Возникла задача объединения нескольких списков из разных источников.</p>
+
+<p>Пусть даны списки:</p>
+
+<pre><code>Заголовок 1
+====
+Элемент 1
+Элемент 2
+...
+Элемент N
+
+Заголовок 2
+====
+Элемент 1
+Элемент 2
+...
+Элемент K
+
+Заголовок 3
+====
+Элемент 1
+Элемент 2
+...
+Элемент M
+</code></pre>
+
+<p>Первый список из БД, второй список — из скачанного с интернета массива, третий — сгенерированный вручную из массива.<br />
+Каждый список {Элемент 1, &hellip;, Элемент Х} содержится в собственном курсоре (сгенерировать курсор из массива можно с помощью <a href="http://developer.android.com/reference/android/database/MatrixCursor.html">MatrixCursor</a>).</p>
+
+<p>Пусть стоит задача отобразить ListView, в котором последовательно отображены элементы всех списков, причём разделённые заголовками.</p>
+
+<p>Сначала я навелосипедил свой NestedAdapter. Исходник тут: <a href="http://pastebin.com/MyrRxmWf">http://pastebin.com/MyrRxmWf</a>
+Этот велосипед вроде даже работает, поддерживает списки как с заголовками, так и без. На вход принимает пары &lt;адаптер, заголовок&gt;, каждый из адаптеров наследует CursorAdapter. Для отображения контента адаптеров он использует их методы getView, для отображения заголовков — стандартный андроидный simple_list_item_1.<br />
+Кстати, у него есть много минусов. Он не умеет отслеживать изменения в курсорах, поэтому при изменении данных в курсоре будут показываться неправильные данные (а можно словить и креш). Поэтому им лучше без доработки не пользоваться.<br />
+Вариант неплохой, но у меня возникло слишком много сомнений в его разумности.</p>
+
+<p>Лёгкое гугление предложило мне <a href="http://developer.android.com/reference/android/database/MergeCursor.html">MergeCursor</a>. Это курсор, который умеет склеивать данные из нескольких курсоров в линейный список.<br />
+Так вот в нём не хватает заголовков и не очень понятно сначала, как их добавить.</p>
+
+<p>Решение простое. Создаём на основе уже упомянутого <a href="http://developer.android.com/reference/android/database/MatrixCursor.html">MatrixCursor</a> курсор из списка с одним элементом.</p>
+
+<pre><code class="language-java">public static class TitleCursor extends MatrixCursor {
+    public static final String ID = &quot;_id&quot;;
+    public static final String TITLE = &quot;cursor_title&quot;;
+
+    public TitleCursor(String title) {
+      super(new String[]{ID, TITLE});
+      RowBuilder builder = newRow();
+      builder.add(0);     // ID
+      builder.add(title); // TITLE
+    }
+}
+</code></pre>
+
+<p>Важное замечание: обязательно нужен столбец с названием _id, потому что на него полагается стандартная реализация CursorAdapter.<br />
+Вот и всё =)</p>
+
+<p>Используется это дело примерно так:</p>
+
+<pre><code class="language-java">MyCursorAdapter.TitleCursor title1 = new MyCursorAdapter.TitleCursor(&quot;Заголовок 1&quot;);
+MyCursorAdapter.TitleCursor title2 = new MyCursorAdapter.TitleCursor(&quot;Заголовок 2&quot;);
+MyCursorAdapter.TitleCursor title3 = new MyCursorAdapter.TitleCursor(&quot;Заголовок 3&quot;);
+Cursor cursor1 = ...;
+Cursor cursor2 = ...;
+Cursor cursor3 = ...;
+
+MergeCursor cursor = new MergeCursor(
+new Cursor[] {
+title1, cursor1,
+title2, cursor2,
+title3, cursor3
+});
+</code></pre>
+
+<p>Ну а потом просто отображаем этот курсор в ListView любимым адаптером.</p>
+
+<p>UPD. А есть ещё более простой способ. Используем <a href="http://developer.android.com/reference/android/widget/ExpandableListView.html">ExpandableListView</a>, для которого вызываем expandGroup для всех групп и переопределяем OnGroupClickListener, чтобы не давать группам свернуться:</p>
+
+<pre><code class="language-java">getExpandableListView().setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+  @Override
+  public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+    return true;
+  }
+});
+</code></pre>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '6 http:\/\/t.xapienz.ru\/?p=6';
+    var disqus_title = 'Простой способ объединять несколько списков в один (с заголовками)';
+    var disqus_url = '\/2013\/07\/08\/mergelist\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/07/01/fail/" rel="prev">Фейл</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/07/09/dontcalloverridable/" rel="next">Не вызывайте overridable-методы в конструкторах</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

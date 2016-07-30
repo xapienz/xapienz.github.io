@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on привет, как дела?</title>
+    <link>/tags/java/</link>
+    <description>Recent content in Java on привет, как дела?</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru-RU</language>
+    <lastBuildDate>Sun, 01 Dec 2013 00:53:42 +0600</lastBuildDate>
+    <atom:link href="/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Впихнуть невпихуемое, или кратко о type erasure в Java на примере</title>
+      <link>/2013/12/01/erasure/</link>
+      <pubDate>Sun, 01 Dec 2013 00:53:42 +0600</pubDate>
+      
+      <guid>/2013/12/01/erasure/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;../../img/slon2u.jpg&#34;&gt;&lt;img src=&#34;../../img/slon2u-150x150.jpg#right&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Type erasure (стирание типов) в Java — это такой однажды вставленный в язык костыль для поддержки generics — параметризации типов у классов/методов. Нужен он был для совместимости байткода с предыдущими версиями Java, а заключается он в том, что проверка на соответствие типов данных в generics производится исключительно во время компиляции, а не во время выполнения.&lt;br /&gt;
+Из этого следует то, что можно обхитрить систему во время компиляции и попробовать этим воспользоваться для запутывания самих себя в рантайме.&lt;/p&gt;
+
+&lt;p&gt;Итак, код.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class Foo&amp;lt;T&amp;gt; {
+    T value1, value2;
+
+    public void print() {
+        System.out.println(value1);
+        System.out.println(value2);
+    }
+}
+
+public static &amp;lt;T&amp;gt; Foo&amp;lt;T&amp;gt; create(Object o1, Object o2) {
+    Foo&amp;lt;T&amp;gt; result = new Foo&amp;lt;T&amp;gt;();
+    result.value1 = (T) o1;
+    result.value2 = (T) o2;
+    return result;
+}
+
+public static void main(String[] args) {
+    Double pi = 3.14;
+    String hello = &amp;quot;hello&amp;quot;;
+    Foo&amp;lt;Integer&amp;gt; test = create(pi, hello);
+    test.print();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Суть кода: создаём объект класса Foo&lt;Integer&gt; с двумя членами типа Integer, помещаем в них объекты типа Double и String и пытаемся их вывести на экран.&lt;br /&gt;
+Логично предположить, что приложение ругнётся на этот код, так как несоответствие типов данных налицо. Однако же результатом работы будет следующий вывод:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;3.14
+hello
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Что же случилось? Стёрлись типы. На самом деле, во время компиляции код преобразовался к виду:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private static class Foo {
+    Object value1, value2;
+    ...
+}
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Клонированный календарик</title>
+      <link>/2013/09/18/dolly/</link>
+      <pubDate>Wed, 18 Sep 2013 22:10:25 +0600</pubDate>
+      
+      <guid>/2013/09/18/dolly/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../../img/64.H5.002-150x150.jpg#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Продолжаю уже ставшей традиционной цепочку постов о календариках (уже второй пост!).&lt;br /&gt;
+Сначала была &lt;a href=&#34;../../2013/07/01/children/&#34;&gt;загадка для детей&lt;/a&gt;. Теперь загадка для повзрослевших. Тех, кто просто пишет на Java (или хотя бы в глаза видел хоть раз строчку import java.util.*) и не интересуется внутренностями какого-то там андроида и дальвика.&lt;/p&gt;
+
+&lt;p&gt;Возьмём такой простенький код. Считаем, что текущая таймзона — Москва. Хотя сработает для любых других, кроме UTC.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;TimeZone utc = TimeZone.getTimeZone(&amp;quot;UTC&amp;quot;);
+
+Calendar calendar = Calendar.getInstance();
+calendar.set(2013, Calendar.AUGUST, 14, 0, 0, 0);
+
+Calendar when1 = (Calendar) calendar.clone();
+when1.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when1.getTime());
+
+Calendar when2 = (Calendar) calendar.clone();
+when2.setTimeZone(utc);
+System.out.println(calendar.getTime());
+System.out.println(when2.getTime());
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Краткое описание: создаём объект календаря с 14 августа 2013 года, дважды его клонируем, в двух клонах меняем таймзону на UTC и выводим полученное.&lt;/p&gt;
+
+&lt;p&gt;Что же он выведет на экран?&lt;/p&gt;
+
+&lt;p&gt;Вот что:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-none&#34;&gt;Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 04:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+Wed Aug 14 00:00:00 MSK 2013
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Необычна вторая строка. Почему-то время не такое, как везде.&lt;/p&gt;
+
+&lt;p&gt;Причина следующая (&lt;a href=&#34;http://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html&#34;&gt;пруф&lt;/a&gt;):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;set(f, value) changes calendar field f to value. In addition, it sets an internal member variable to indicate that calendar field f has been changed. Although calendar field f is changed immediately, the calendar&amp;rsquo;s time value in milliseconds is not recomputed until the next call to get(), getTime(), getTimeInMillis(), add(), or roll() is made.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Кратко по-русски: изменение полей в календаре ленивое и сразу не пересчитывает внутреннее состояние (миллисекунды с ~ начала 1970 года) до тех пор, пока не произойдёт попытка что-то из него прочитать.&lt;/p&gt;
+
+&lt;p&gt;А вот то, что из-за вызова clone() потерялась некоторая информация о том, что было изменено и не пересчиталось — баг :)&lt;/p&gt;
+
+&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Много способов узнать, насколько много</title>
+      <link>/2013/08/13/tldr/</link>
+      <pubDate>Tue, 13 Aug 2013 18:48:25 +0600</pubDate>
+      
+      <guid>/2013/08/13/tldr/</guid>
+      <description>&lt;p&gt;Разные контейнеры/коллекции разных объектов имеют разные интерфейсы доступа. Это нормально. Но часто в произвольный момент можно позабыть, какой из методов необходимо использовать для узнавания количества элементов, содержащихся в этом нечто.&lt;/p&gt;
+
+&lt;p&gt;Итак, поехали.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Простой массив&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;int [] array = new int[10];
+int length = array.length;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Здесь .length — даже не метод. Он выглядит как простое публичное поле класса.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;org.json.JSONArray&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;JSONArray jsonArray = new JSONArray();
+int length = jsonArray.length();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;А вот здесь length() - уже метод)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;java.util.List&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;Integer&amp;gt;();
+int length = list.size();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;android.widget.Adapter&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;Adapter adapter = new ArrayAdapter&amp;lt;Integer&amp;gt;(getContext(), android.R.layout.simple_list_item_1, new int[10]);
+int length = adapter.getCount();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;java.lang.reflect.Array&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;int [] array = new int[10];
+int length = Array.getLength(array);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Хоть это и не класс, содержащий в себе что-то, но метод для определения длины массива он содержит =)&lt;/p&gt;
+
+&lt;p&gt;В общем, если погуглить и постараться, то список можно продолжать =)&lt;br /&gt;
+Найдутся length, size, count в разных комбинациях с префиксом get и без.&lt;/p&gt;
+
+&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

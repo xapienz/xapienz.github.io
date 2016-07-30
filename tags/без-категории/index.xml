@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Без Категории on привет, как дела?</title>
+    <link>/tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8/</link>
+    <description>Recent content in Без Категории on привет, как дела?</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru-RU</language>
+    <lastBuildDate>Fri, 02 Aug 2013 00:29:50 +0600</lastBuildDate>
+    <atom:link href="/tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Вот это поворот</title>
+      <link>/2013/08/02/rotation/</link>
+      <pubDate>Fri, 02 Aug 2013 00:29:50 +0600</pubDate>
+      
+      <guid>/2013/08/02/rotation/</guid>
+      <description>&lt;p&gt;Во вторник вечером на хабре появилась статья про квайны: &lt;a href=&#34;http://habrahabr.ru/post/188378/&#34;&gt;http://habrahabr.ru/post/188378/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;После этого я написал в свой бложик свою &lt;a href=&#34;../../2013/07/30/qui_ine/&#34;&gt;статейку&lt;/a&gt; на ту же тему, начинающуюся с ссылки на исходный текст. И заканчивающуюся отсылкой к книжке &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Вчера (в четверг) на хабре появилась вторая статья того же автора (&lt;a href=&#34;http://habrahabr.ru/post/188552/&#34;&gt;http://habrahabr.ru/post/188552/&lt;/a&gt;), начинающаяся, внезапно, ссылками на эту же самую книжку.&lt;/p&gt;
+
+&lt;p&gt;Либо автор меня прочитал, либо интересное совпадение.&lt;/p&gt;
+
+&lt;p&gt;У меня всё.&lt;br /&gt;
+И паранойя)&lt;/p&gt;
+
+&lt;p&gt;UPD: статистика вордпресса мне как бы намекнула, что автор статьи на хабре ко мне заходил)&lt;br /&gt;
+Привет, &lt;a href=&#34;http://habrahabr.ru/users/gromozeka1980/&#34;&gt;gromozeka1980&lt;/a&gt;! :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Оу май квайн</title>
+      <link>/2013/07/30/qui_ine/</link>
+      <pubDate>Tue, 30 Jul 2013 22:22:20 +0600</pubDate>
+      
+      <guid>/2013/07/30/qui_ine/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../../img/pythocat.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Прочитал тут статейку на хабре про квайны: &lt;a href=&#34;http://habrahabr.ru/post/188378/&#34;&gt;http://habrahabr.ru/post/188378/&lt;/a&gt;&lt;br /&gt;
+Решил размяться — написать свой квайн.&lt;/p&gt;
+
+&lt;p&gt;Для тех, кто не в курсе. Квайн — это программа, которая пишет саму себя. Ну или более сложный случай: пишет другую программу на другом языке, которая тоже запускается и пишет ещё какую-то программу. И так далее. В итоге можно когда-то вернуться к исходному коду.&lt;/p&gt;
+
+&lt;p&gt;Первым делом я осилил свой квайн на C++. Он простой.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt; 
+int main() {
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %c int main() { char data [] = %c%s%c; printf(data, 10, 34, data, 34); return 0;}&amp;quot;;
+  printf(data, 10, 34, data, 34);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Символы 10 и 34 — это перевод строки и двойная кавычка соответственно. Понадобилось вставить в прямом виде, чтобы при многократных запусках экранирование не сползало.&lt;/p&gt;
+
+&lt;p&gt;Затем я решил добавить немного питона. Пользуясь статьёй на хабре.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+void p(char * pdata, char * s) {
+  printf(pdata, 34, s, 34);
+}
+int main() {
+  char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;;
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %c void p(char * pdata, char *s) { printf(pdata, 34, s, 34); } int main() { char pdata [] = %c%s%c; char data [] = %c%s%c; printf(data, 10, 34, pdata, 34, 34, data, 34); return 0;}&amp;quot;;
+  printf(data, 10, 34, pdata, 34, 34, data, 34);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Как я понял после запуска, я совсем забыл про питон %) И это тоже оказался просто C++→C++-квайнчик.&lt;/p&gt;
+
+&lt;p&gt;После долгих и мучительных десятиминутных размышлений я выкинул метод &lt;code&gt;p()&lt;/code&gt;, который генерирует питонокод, и влепил кусочки кода прямо в main.&lt;br /&gt;
+Получилось так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+int main() {
+  char ps [] = {92, 110, 0};    // %s
+  char pc [] = {92, 99, 0};     // %c
+  char k [] = {34, 0};          // &amp;quot;
+  char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;;
+  char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&amp;quot;;
+  char ndata [1000];
+  sprintf(ndata, data, ps, k, pdata, k, k, data, k);
+  printf(pdata, 39, ndata, 39);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Быдлокод, ага) Но работает.&lt;br /&gt;
+Генерируемый этим кодом питонокод выглядит наипростейшим образом — печатает эту самую программу.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(&#39;#include &amp;lt;stdio.h&amp;gt; \n int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = &amp;quot;print(%c%s%c)&amp;quot;; char data [] = &amp;quot;#include &amp;lt;stdio.h&amp;gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&amp;quot;; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;P.S. Не обращайте внимания на комментарии в коде и переносы строк. Они после первых же компиляций исчезнут, а нужны просто для удобства чтения и кодинга.&lt;br /&gt;
+P.P.S. Люто рекомендую книжку Д. Хофштадтера (того, в честь которого назвали Леонарда в ТБВ) &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;. Там есть немного про квайны и вообще автореференцию, но книжка интересна не квайнами))&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Yet another music player: whyMusic</title>
+      <link>/2013/07/27/yet-another-music-player-whymusic/</link>
+      <pubDate>Sat, 27 Jul 2013 21:49:46 +0600</pubDate>
+      
+      <guid>/2013/07/27/yet-another-music-player-whymusic/</guid>
+      <description>&lt;p&gt;Написал свой нескучный кроссплатформенный музыкальный плеер - whyMusic.&lt;/p&gt;
+
+&lt;p&gt;Плеер — всего лишь обёртка над webview, в котором открыт сайт музыкального сервиса. Написан на Qt 4. Но можно снаружи (читай: глобальными хоткеями/командами) дёргать за кнопки &amp;ldquo;play&amp;rdquo;, &amp;ldquo;назад&amp;rdquo;, &amp;ldquo;вперёд&amp;rdquo;.&lt;br /&gt;
+Изначально задумывался как оболочка над Яндекс.Музыкой, но теперь он стал мультисервисным — сегодня я just for fun добавил поддержку Jamendo.&lt;/p&gt;
+
+&lt;p&gt;Как работает:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;запускаем приложение первый раз — оно запустится;&lt;/li&gt;
+&lt;li&gt;авторизуемся в нужном сервисе (куки пока не хранятся, поэтому каждый раз надо будет авторизоваться);&lt;/li&gt;
+&lt;li&gt;запускаем приложение второй и последующие разы, отправляя команды в аргументах командной строки, — они будут выполняться.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Пример:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ ./ymusic &amp;amp;
+[1] 27324
+$ ./ymusic toggle
+play
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Текущий список команд: toggle (переключить паузу/воспроизведение), play, pause, back, next.&lt;/p&gt;
+
+&lt;p&gt;Как пользоваться:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Собрать под свою платформу: &lt;code&gt;qmake &amp;amp;&amp;amp; make&lt;/code&gt;. Для сборки нужен установленный Qt4 с соответствующими header&amp;rsquo;ами (на ubuntu это пакеты qt4-qmake, libqt4-dev, libqt4-webkit).&lt;/li&gt;
+&lt;li&gt;Запустить приложение, залогиниться (куки пока что не хранятся, поэтому каждый раз придётся логиниться заново).&lt;/li&gt;
+&lt;li&gt;Назначить близкой вашему сердцу утилитой горячие клавиши на запуск приложения с аргументами &amp;ldquo;play&amp;rdquo;, &amp;ldquo;back&amp;rdquo;, &amp;ldquo;next&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;Использовать горячие клавиши.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Проект тут: &lt;a href=&#34;https://bitbucket.org/xapienz/whymusic&#34;&gt;https://bitbucket.org/xapienz/whymusic&lt;/a&gt;&lt;br /&gt;
+Форкайте, делитесь)&lt;/p&gt;
+
+&lt;p&gt;Скриншот вот:&lt;br /&gt;
+&lt;a href=&#34;../../img/shot29.png&#34;&gt;&lt;img src=&#34;../../img/shot29-300x225.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Бинарники для разных платформ будут потом, когда руки дойдут :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>mAPK 1.0 — держим несколько версий одного приложения на Android. UPD: уже в Google Play</title>
+      <link>/2013/07/23/mapk/</link>
+      <pubDate>Tue, 23 Jul 2013 23:37:15 +0600</pubDate>
+      
+      <guid>/2013/07/23/mapk/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;../../img/icon.png#right&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Однажды мне уже было скучно и хотелось чем-то заняться. Тогда появился проект &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.ylenta&#34;&gt;Ленточка&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Теперь же захотелось иметь несколько версий одного приложения на устройстве и переключаться между ними. Разработчики поймут.&lt;/p&gt;
+
+&lt;p&gt;Представляю вниманию читателей mAPK (multi-APK).&lt;/p&gt;
+
+&lt;p&gt;Приложение представляет собой простой список установленных приложений (за исключением помеченных как системные). Напротив каждого приложения две кнопки: &amp;ldquo;сохранить&amp;rdquo; и &amp;ldquo;загрузить&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Кнопка &amp;ldquo;сохранить&amp;rdquo; делает бэкап текущего состояния (на данный момент только каталог с данными из /data и apk-файл) приложения с введённым пользователем идентификатором. Кнопка &amp;ldquo;загрузить&amp;rdquo; предлагает список из ранее сохранённых состояний, после выбора пункта которого выбранное приложение удаляется и восстанавливается выбранное состояние.&lt;/p&gt;
+
+&lt;p&gt;На всякий случай (для забывчивых) есть галочка &amp;ldquo;Сохранять автоматически&amp;rdquo;, которая меняет поведение кнопки &amp;ldquo;загрузить&amp;rdquo; следующим образом: сначала сохраняется состояние приложения под последним выбранным идентификатором (его можно увидеть под packagename-ом приложения), а уже потом производится восстановление выбранного состояния.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Требования&lt;/strong&gt;: нужен root и установленный busybox.&lt;br /&gt;
+Никаких проверок на это (да и на другие ошибки) в приложении пока нет, поэтому возможны неожиданные результаты (а может что-то и поломаться).&lt;/p&gt;
+
+&lt;p&gt;Скриншот:&lt;br /&gt;
+&lt;a href=&#34;../../img/2013-07-23-21-19-44.png&#34;&gt;&lt;img src=&#34;../../img/2013-07-23-21-19-44-168x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Замечания и пожелания приветствуются.&lt;br /&gt;
+Ссылка: &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&#34;&gt;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;P.S. Если непонятно, нужно ли это Вам, то значит, что не нужно.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Простой способ объединять несколько списков в один (с заголовками)</title>
+      <link>/2013/07/08/mergelist/</link>
+      <pubDate>Mon, 08 Jul 2013 11:24:00 +0600</pubDate>
+      
+      <guid>/2013/07/08/mergelist/</guid>
+      <description>&lt;p&gt;Возникла задача объединения нескольких списков из разных источников.&lt;/p&gt;
+
+&lt;p&gt;Пусть даны списки:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Заголовок 1
+====
+Элемент 1
+Элемент 2
+...
+Элемент N
+
+Заголовок 2
+====
+Элемент 1
+Элемент 2
+...
+Элемент K
+
+Заголовок 3
+====
+Элемент 1
+Элемент 2
+...
+Элемент M
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Первый список из БД, второй список — из скачанного с интернета массива, третий — сгенерированный вручную из массива.&lt;br /&gt;
+Каждый список {Элемент 1, &amp;hellip;, Элемент Х} содержится в собственном курсоре (сгенерировать курсор из массива можно с помощью &lt;a href=&#34;http://developer.android.com/reference/android/database/MatrixCursor.html&#34;&gt;MatrixCursor&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Пусть стоит задача отобразить ListView, в котором последовательно отображены элементы всех списков, причём разделённые заголовками.&lt;/p&gt;
+
+&lt;p&gt;Сначала я навелосипедил свой NestedAdapter. Исходник тут: &lt;a href=&#34;http://pastebin.com/MyrRxmWf&#34;&gt;http://pastebin.com/MyrRxmWf&lt;/a&gt;
+Этот велосипед вроде даже работает, поддерживает списки как с заголовками, так и без. На вход принимает пары &amp;lt;адаптер, заголовок&amp;gt;, каждый из адаптеров наследует CursorAdapter. Для отображения контента адаптеров он использует их методы getView, для отображения заголовков — стандартный андроидный simple_list_item_1.&lt;br /&gt;
+Кстати, у него есть много минусов. Он не умеет отслеживать изменения в курсорах, поэтому при изменении данных в курсоре будут показываться неправильные данные (а можно словить и креш). Поэтому им лучше без доработки не пользоваться.&lt;br /&gt;
+Вариант неплохой, но у меня возникло слишком много сомнений в его разумности.&lt;/p&gt;
+
+&lt;p&gt;Лёгкое гугление предложило мне &lt;a href=&#34;http://developer.android.com/reference/android/database/MergeCursor.html&#34;&gt;MergeCursor&lt;/a&gt;. Это курсор, который умеет склеивать данные из нескольких курсоров в линейный список.&lt;br /&gt;
+Так вот в нём не хватает заголовков и не очень понятно сначала, как их добавить.&lt;/p&gt;
+
+&lt;p&gt;Решение простое. Создаём на основе уже упомянутого &lt;a href=&#34;http://developer.android.com/reference/android/database/MatrixCursor.html&#34;&gt;MatrixCursor&lt;/a&gt; курсор из списка с одним элементом.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public static class TitleCursor extends MatrixCursor {
+    public static final String ID = &amp;quot;_id&amp;quot;;
+    public static final String TITLE = &amp;quot;cursor_title&amp;quot;;
+
+    public TitleCursor(String title) {
+      super(new String[]{ID, TITLE});
+      RowBuilder builder = newRow();
+      builder.add(0);     // ID
+      builder.add(title); // TITLE
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Важное замечание: обязательно нужен столбец с названием _id, потому что на него полагается стандартная реализация CursorAdapter.&lt;br /&gt;
+Вот и всё =)&lt;/p&gt;
+
+&lt;p&gt;Используется это дело примерно так:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;MyCursorAdapter.TitleCursor title1 = new MyCursorAdapter.TitleCursor(&amp;quot;Заголовок 1&amp;quot;);
+MyCursorAdapter.TitleCursor title2 = new MyCursorAdapter.TitleCursor(&amp;quot;Заголовок 2&amp;quot;);
+MyCursorAdapter.TitleCursor title3 = new MyCursorAdapter.TitleCursor(&amp;quot;Заголовок 3&amp;quot;);
+Cursor cursor1 = ...;
+Cursor cursor2 = ...;
+Cursor cursor3 = ...;
+
+MergeCursor cursor = new MergeCursor(
+new Cursor[] {
+title1, cursor1,
+title2, cursor2,
+title3, cursor3
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ну а потом просто отображаем этот курсор в ListView любимым адаптером.&lt;/p&gt;
+
+&lt;p&gt;UPD. А есть ещё более простой способ. Используем &lt;a href=&#34;http://developer.android.com/reference/android/widget/ExpandableListView.html&#34;&gt;ExpandableListView&lt;/a&gt;, для которого вызываем expandGroup для всех групп и переопределяем OnGroupClickListener, чтобы не давать группам свернуться:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;getExpandableListView().setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+  @Override
+  public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+    return true;
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Фейл</title>
+      <link>/2013/07/01/fail/</link>
+      <pubDate>Mon, 01 Jul 2013 17:39:00 +0600</pubDate>
+      
+      <guid>/2013/07/01/fail/</guid>
+      <description>&lt;p&gt;Мне кажется, это фейл студии Лебедева.
+Внимание на букву &amp;ldquo;П&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../img/ya.gif&#34; alt=&#34;&#34; /&gt;]&lt;/p&gt;
+
+&lt;p&gt;Пруф тут: &lt;a href=&#34;http://www.artlebedev.ru/everything/yandex/type/&#34;&gt;http://www.artlebedev.ru/everything/yandex/type/&lt;/a&gt;&lt;br /&gt;
+Аналогично с буквой &amp;ldquo;Д&amp;rdquo; в словах &amp;ldquo;Деньги&amp;rdquo; и &amp;ldquo;Диск&amp;rdquo;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Меня пиарят на хабре</title>
+      <link>/2013/07/01/pr/</link>
+      <pubDate>Mon, 01 Jul 2013 12:14:00 +0600</pubDate>
+      
+      <guid>/2013/07/01/pr/</guid>
+      <description>&lt;p&gt;Команда Яндекс.Подписок решила, что стоит народу узнать, что уже есть как минимум один мобильный клиент для Яндекс.Подписок.&lt;br /&gt;
+&lt;a href=&#34;http://habrahabr.ru/company/yandex/blog/185198/&#34;&gt;http://habrahabr.ru/company/yandex/blog/185198/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Интересно, как хабраэффект скажется на активности скачиваний =)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>История неуспеха, или почему в Ленточке до сих пор нет свайпа между постами (UPD: уже есть)</title>
+      <link>/2013/06/27/whatapity/</link>
+      <pubDate>Thu, 27 Jun 2013 21:40:00 +0600</pubDate>
+      
+      <guid>/2013/06/27/whatapity/</guid>
+      <description>&lt;p&gt;Начну с того, что кратко расскажу о курсорах и адаптерах в Android.&lt;/p&gt;
+
+&lt;p&gt;Есть такая полезная штука — адаптер. Зачем он нужен?&lt;br /&gt;
+Допустим, у нас есть простой список. ListBox/ListView/whatever. Как ни назови, список есть список. Это может быть список SMS-сообщений, это может быть список покупок на ближайший день рождения, а может быть массив простых чисел от 2 до 5.&lt;/p&gt;
+
+&lt;p&gt;Так вот наполнять его руками не круто.&lt;br /&gt;
+Раньше было принято как?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;ListBox.addItem(&amp;quot;item1&amp;quot;)
+ListBox.addItem(&amp;quot;item2&amp;quot;)
+etc.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Например, так было в Visual Basic, когда я им ещё увлекался.&lt;br /&gt;
+Гораздо удобнее привязать список к какому-то набору данных. Не обязательно к массиву. Это может быть динамический список. Например, страница результатов гугла. Или внеземной источник со списком неугодных жителей голубой планеты.&lt;br /&gt;
+Вот этот произвольный источник данных мы назовём адаптером.&lt;br /&gt;
+И будем писать:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;listView.setAdapter(new GoogleResultsAdapter(&amp;quot;keygen crack скачать бесплатно&amp;quot;))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Список может быть бесконечным и его необязательно инициализировать одномоментно целиком. Можно показывать по 3 результата, а остальные подгружать по необходимости. Ленивая загрузка.&lt;/p&gt;
+
+&lt;p&gt;А теперь задумаемся. Пусть есть большая и клёвая база данных, откуда хочется читать данные и выводить списком. Для получения какого-то списка из базы можно выполнить простой select-запрос.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;SELECT title, body FROM messages_table WHERE username=&amp;quot;id1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Получим список всех сообщений для пользователя id1.&lt;br /&gt;
+Такой объект запроса с возможностью итерирования по строкам ответа называется курсором. Вообще, это не андроид-специфичная вещь, а вполне себе известное понятие в базах данных. Его можно периодически обновлять, чтобы актуализировать данные, а можно данные из него также выводить.
+Удобным способом вывода данных из курсора будет адаптер. Таким образом можно показать результаты запроса в виде ListView.&lt;/p&gt;
+
+&lt;p&gt;Оба этих объекта успешно применяются, например, в &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.ylenta&#34;&gt;Ленточке&lt;/a&gt; для вывода списка лент и списка постов. При изменении какого-то параметра, например, количества непрочитанных сообщений в фиде или статуса &amp;ldquo;прочитано/новое&amp;rdquo; поста, данные автоматически обновляются в курсоре и отображаются адаптером в списке. Получается как бы проекция таблицы результатов (и, возможно, даже не одной) на обычный компонент ListView.&lt;/p&gt;
+
+&lt;p&gt;Другим не менее прекрасным, но менее очевидным, применением является использование этих технологий в показе экрана текущего поста. При свайпе пальцем влево/вправо происходит переключение на следующий/предыдущий пост прямо на месте. Можно сказать, что это горизонтальный список с одним видимым элементом.&lt;br /&gt;
+При прочтении сообщения или изменении других его метаданных статус сразу же отображается, так как список привязан к адаптеру, автоматически отслеживающему все изменения в данных курсора. Если вдруг фоновая часть приложения (сервис автоматического обновления, который я ещё не начинал делать) изменит какие-то данные в базе (загрузит и сохранит с сервера информацию о том, что пользователь отметил 1 и 4 посты как избранные, а 6 пост отметил непрочитанным), то это сразу отобразится пользователю.&lt;/p&gt;
+
+&lt;p&gt;Всё очень чудесно, а понимание того, как это устроено, а также использование этого доставляет как минимум удовольствие. Как максимум — новые проблемы.&lt;br /&gt;
+Допустим, мы используем курсор, ссылающийся на непрочитанные посты, с запросом &lt;code&gt;SELECT * FROM posts WHERE read=0&lt;/code&gt;. И просто показываем эти посты, позволяя их листать и переключаться между ними.
+Но. Есть одно но. Каждое открытие другого поста (простым движением пальца) отмечает его прочитанным (вполне логично, чтобы не заставлять пользователя каждый раз нажимать кнопку &amp;ldquo;да, я прочитал это, хочу дальше читать&amp;rdquo;). И курсор моментально на это реагирует. Из результатов запроса этот пост пропадает (ведь &lt;code&gt;WHERE read=0&lt;/code&gt;), из текущего одноэлементного списка пропадает и приложению ничего не остаётся кроме как переключиться на следующий непрочитанный пост. Открыт новый пост — отмечаем прочитанным.
+Внимательный читатель может догадаться, что таким образом все новые посты через недолгий срок сами отметятся как прочитанные и пользователь не успеет ничего почитать. Грустно. Но именно на этом я сегодня зашёл в тупик.&lt;/p&gt;
+
+&lt;p&gt;Красивая технология — практически прямая проекция содержимого БД на UI — обернулась трагедией. И из-за этого пользователи Ленточки так и не получили ожидаемое обновление приложения =(&lt;br /&gt;
+Будет, конечно, обновление. Но только придётся частично отказаться от такого подхода.&lt;br /&gt;
+Тем не менее, я, ранее близко не прикасавшийся к курсорам и адаптерам, в восторге от того, как заранее продуманная и старательно написанная мелочь наткнулась на не ожидаемое мной поведение. Это было слишком внезапно, но невероятно интересно. Отрицательный результат — тоже результат.&lt;/p&gt;
+
+&lt;p&gt;Так что добра тебе, дорогой читатель. Не забывай о том, что надо почаще думать головой и более тщательно продумывать последствия, даже если всё заранее слишком очевидно и просто. Я ещё учусь, наступаю на грабли, тыкаюсь носом в подводные камни. Но каждый день узнаю что-то новое и интересное. Я джуниор, мне можно ^_^&lt;/p&gt;
+
+&lt;p&gt;А вообще я слоупок и за последнюю неделю мало чего сделал по Ленточке. Зато появилась авторизация через аккаунт Яндекса, если установлено хотя бы одно из приложений, требующих входа в аккаунт (типа Яндекс.Почты, Яндекс.Диска или Яндекс.Музыки). Но это уже совсем другая история :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Неделя</title>
+      <link>/2013/06/22/week/</link>
+      <pubDate>Sat, 22 Jun 2013 15:56:00 +0600</pubDate>
+      
+      <guid>/2013/06/22/week/</guid>
+      <description>&lt;p&gt;Сегодня исполняется ровно неделя с тех пор, как я начал заниматься проектом &amp;ldquo;Ленточка&amp;rdquo;.&lt;br /&gt;
+О том, что это такое, можно прочитать &lt;a href=&#34;../../2013/06/21/lalala/&#34;&gt;тут&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Что же я успел за одну неделю.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;решить: &amp;ldquo;надо! я всё-таки этим займусь&amp;rdquo;;&lt;/li&gt;
+&lt;li&gt;создать первую рабочую реализацию клиента API на основе открытого API Яндекс.Подписок;&lt;/li&gt;
+&lt;li&gt;заставить её работать в Android-приложении;&lt;/li&gt;
+&lt;li&gt;выпустить в пятый день существования её на Google Play и Яндекс.Store рабочую версию;&lt;/li&gt;
+&lt;li&gt;набрать более 100 активных пользователей на Google Play за первые два дня после выпуска приложения в мир.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;При этом занимался проектом только в свободное время, стараясь не причинять ущерба основной работе.&lt;/p&gt;
+
+&lt;p&gt;Подробнее о статистике загрузок.&lt;br /&gt;
+В первый день (19 июня) получилось целых 5 скачиваний в Play. Одно из них - моё :). За второй день было уже 99 загрузок.&lt;/p&gt;
+
+&lt;p&gt;Так что проект растёт. И это хорошо.&lt;/p&gt;
+
+&lt;p&gt;О планах на будущие версии пока говорить не буду =)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Встречайте «Ленточку» — бесплатный Android-клиент для Яндекс.Подписок</title>
+      <link>/2013/06/21/lalala/</link>
+      <pubDate>Fri, 21 Jun 2013 09:12:00 +0600</pubDate>
+      
+      <guid>/2013/06/21/lalala/</guid>
+      <description>&lt;p&gt;Ниже привожу копипасту отвергнутой хабром новости, любезно сочинённой и написанной &lt;a href=&#34;http://habrahabr.ru/users/xpavlov/&#34;&gt;xpavlov&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Привет!&lt;/p&gt;
+
+&lt;p&gt;Вчера, в день своего рождения, xapienz опубликовал в Google Play и Яндекс.Store бесплатную бета-версию приложения Ленточка, для чтения на Android-устройствах новостей из Яндекс.подписок — альтернативы закрываемому 1 июля Google reader‘у.&lt;/p&gt;
+
+&lt;p&gt;Скриншоты:&lt;br /&gt;
+&lt;a href=&#34;../../img/Screenshot_2013-06-19-18-55-20_.1600.png&#34;&gt;&lt;img src=&#34;../../img/Screenshot_2013-06-19-18-55-20_.320.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt; &lt;a href=&#34;../../img/Screenshot_2013-06-19-18-54-17_.1600.png&#34;&gt;&lt;img src=&#34;../../img/Screenshot_2013-06-19-18-54-17_.320.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Текущая версия программы умеет немного:&lt;br /&gt;
+— Загрузка количества непрочитанных постов с сервера при запуске программы&lt;br /&gt;
+— Ручная подгрузка в фоновом режиме списка постов выбранного фида (при нажатии кнопки «обновить»)&lt;br /&gt;
+— Добавление постов в избранное&lt;br /&gt;
+— Открытие ссылки с постом в браузере&lt;br /&gt;
+— Автоматическая пометка прочитанных постов&lt;br /&gt;
+— Кеширование загруженных постов для чтения в оффлайн-режиме&lt;/p&gt;
+
+&lt;p&gt;Что пока не умеет:&lt;br /&gt;
+— Интерфейс пока еще не оптимизирован под планшеты&lt;br /&gt;
+— Не поддерживает группировку новостных лент по папкам&lt;br /&gt;
+— Автообновление списка постов и счетчика через определенные интервалы времени&lt;br /&gt;
+— Помечание поста, как непрочитанного&lt;br /&gt;
+— Нету отдельных фидов «Все посты» и «Избранное»&lt;br /&gt;
+— Не работает листающий жест для переключения между постами&lt;br /&gt;
+— Нет переключателя «Показать все посты» и «Показать только непрочитанные»&lt;br /&gt;
+— Счетчик непрочитанных постов не уменьшается при прочтении постов (так, как значение счетчика пока просто подгружается с сервера)&lt;/p&gt;
+
+&lt;p&gt;Автор будет благодарен за замечания и предложения по улучшению программы.&lt;br /&gt;
+Приятного пользования!&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

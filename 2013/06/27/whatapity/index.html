@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    История неуспеха, или почему в Ленточке до сих пор нет свайпа между постами (UPD: уже есть) | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/06/27/whatapity/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>История неуспеха, или почему в Ленточке до сих пор нет свайпа между постами (UPD: уже есть)</h1>
+      <div class="meta">
+        Jun 27, 2013 &nbsp;
+        
+          #<a href="../../../../tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8">без категории</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Начну с того, что кратко расскажу о курсорах и адаптерах в Android.</p>
+
+<p>Есть такая полезная штука — адаптер. Зачем он нужен?<br />
+Допустим, у нас есть простой список. ListBox/ListView/whatever. Как ни назови, список есть список. Это может быть список SMS-сообщений, это может быть список покупок на ближайший день рождения, а может быть массив простых чисел от 2 до 5.</p>
+
+<p>Так вот наполнять его руками не круто.<br />
+Раньше было принято как?</p>
+
+<pre><code class="language-java">ListBox.addItem(&quot;item1&quot;)
+ListBox.addItem(&quot;item2&quot;)
+etc.
+</code></pre>
+
+<p>Например, так было в Visual Basic, когда я им ещё увлекался.<br />
+Гораздо удобнее привязать список к какому-то набору данных. Не обязательно к массиву. Это может быть динамический список. Например, страница результатов гугла. Или внеземной источник со списком неугодных жителей голубой планеты.<br />
+Вот этот произвольный источник данных мы назовём адаптером.<br />
+И будем писать:</p>
+
+<pre><code class="language-java">listView.setAdapter(new GoogleResultsAdapter(&quot;keygen crack скачать бесплатно&quot;))
+</code></pre>
+
+<p>Список может быть бесконечным и его необязательно инициализировать одномоментно целиком. Можно показывать по 3 результата, а остальные подгружать по необходимости. Ленивая загрузка.</p>
+
+<p>А теперь задумаемся. Пусть есть большая и клёвая база данных, откуда хочется читать данные и выводить списком. Для получения какого-то списка из базы можно выполнить простой select-запрос.</p>
+
+<pre><code class="language-sql">SELECT title, body FROM messages_table WHERE username=&quot;id1&quot;
+</code></pre>
+
+<p>Получим список всех сообщений для пользователя id1.<br />
+Такой объект запроса с возможностью итерирования по строкам ответа называется курсором. Вообще, это не андроид-специфичная вещь, а вполне себе известное понятие в базах данных. Его можно периодически обновлять, чтобы актуализировать данные, а можно данные из него также выводить.
+Удобным способом вывода данных из курсора будет адаптер. Таким образом можно показать результаты запроса в виде ListView.</p>
+
+<p>Оба этих объекта успешно применяются, например, в <a href="https://play.google.com/store/apps/details?id=ru.xapienz.ylenta">Ленточке</a> для вывода списка лент и списка постов. При изменении какого-то параметра, например, количества непрочитанных сообщений в фиде или статуса &ldquo;прочитано/новое&rdquo; поста, данные автоматически обновляются в курсоре и отображаются адаптером в списке. Получается как бы проекция таблицы результатов (и, возможно, даже не одной) на обычный компонент ListView.</p>
+
+<p>Другим не менее прекрасным, но менее очевидным, применением является использование этих технологий в показе экрана текущего поста. При свайпе пальцем влево/вправо происходит переключение на следующий/предыдущий пост прямо на месте. Можно сказать, что это горизонтальный список с одним видимым элементом.<br />
+При прочтении сообщения или изменении других его метаданных статус сразу же отображается, так как список привязан к адаптеру, автоматически отслеживающему все изменения в данных курсора. Если вдруг фоновая часть приложения (сервис автоматического обновления, который я ещё не начинал делать) изменит какие-то данные в базе (загрузит и сохранит с сервера информацию о том, что пользователь отметил 1 и 4 посты как избранные, а 6 пост отметил непрочитанным), то это сразу отобразится пользователю.</p>
+
+<p>Всё очень чудесно, а понимание того, как это устроено, а также использование этого доставляет как минимум удовольствие. Как максимум — новые проблемы.<br />
+Допустим, мы используем курсор, ссылающийся на непрочитанные посты, с запросом <code>SELECT * FROM posts WHERE read=0</code>. И просто показываем эти посты, позволяя их листать и переключаться между ними.
+Но. Есть одно но. Каждое открытие другого поста (простым движением пальца) отмечает его прочитанным (вполне логично, чтобы не заставлять пользователя каждый раз нажимать кнопку &ldquo;да, я прочитал это, хочу дальше читать&rdquo;). И курсор моментально на это реагирует. Из результатов запроса этот пост пропадает (ведь <code>WHERE read=0</code>), из текущего одноэлементного списка пропадает и приложению ничего не остаётся кроме как переключиться на следующий непрочитанный пост. Открыт новый пост — отмечаем прочитанным.
+Внимательный читатель может догадаться, что таким образом все новые посты через недолгий срок сами отметятся как прочитанные и пользователь не успеет ничего почитать. Грустно. Но именно на этом я сегодня зашёл в тупик.</p>
+
+<p>Красивая технология — практически прямая проекция содержимого БД на UI — обернулась трагедией. И из-за этого пользователи Ленточки так и не получили ожидаемое обновление приложения =(<br />
+Будет, конечно, обновление. Но только придётся частично отказаться от такого подхода.<br />
+Тем не менее, я, ранее близко не прикасавшийся к курсорам и адаптерам, в восторге от того, как заранее продуманная и старательно написанная мелочь наткнулась на не ожидаемое мной поведение. Это было слишком внезапно, но невероятно интересно. Отрицательный результат — тоже результат.</p>
+
+<p>Так что добра тебе, дорогой читатель. Не забывай о том, что надо почаще думать головой и более тщательно продумывать последствия, даже если всё заранее слишком очевидно и просто. Я ещё учусь, наступаю на грабли, тыкаюсь носом в подводные камни. Но каждый день узнаю что-то новое и интересное. Я джуниор, мне можно ^_^</p>
+
+<p>А вообще я слоупок и за последнюю неделю мало чего сделал по Ленточке. Зато появилась авторизация через аккаунт Яндекса, если установлено хотя бы одно из приложений, требующих входа в аккаунт (типа Яндекс.Почты, Яндекс.Диска или Яндекс.Музыки). Но это уже совсем другая история :)</p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '10 http:\/\/t.xapienz.ru\/?p=10';
+    var disqus_title = 'История неуспеха, или почему в Ленточке до сих пор нет свайпа между постами (UPD: уже есть)';
+    var disqus_url = '\/2013\/06\/27\/whatapity\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/06/25/wtf/" rel="prev">fyiWillBeAdvancedByHostKThx</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/07/01/pr/" rel="next">Меня пиарят на хабре</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

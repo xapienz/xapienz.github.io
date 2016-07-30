@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Оу май квайн | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2013/07/30/qui_ine/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Оу май квайн</h1>
+      <div class="meta">
+        Jul 30, 2013 &nbsp;
+        
+          #<a href="../../../../tags/%D0%B1%D0%B5%D0%B7-%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8">без категории</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p><img src="../../../../img/pythocat.png#right" alt="" /></p>
+
+<p>Прочитал тут статейку на хабре про квайны: <a href="http://habrahabr.ru/post/188378/">http://habrahabr.ru/post/188378/</a><br />
+Решил размяться — написать свой квайн.</p>
+
+<p>Для тех, кто не в курсе. Квайн — это программа, которая пишет саму себя. Ну или более сложный случай: пишет другую программу на другом языке, которая тоже запускается и пишет ещё какую-то программу. И так далее. В итоге можно когда-то вернуться к исходному коду.</p>
+
+<p>Первым делом я осилил свой квайн на C++. Он простой.</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt; 
+int main() {
+  char data [] = &quot;#include &lt;stdio.h&gt; %c int main() { char data [] = %c%s%c; printf(data, 10, 34, data, 34); return 0;}&quot;;
+  printf(data, 10, 34, data, 34);
+  return 0;
+}
+</code></pre>
+
+<p>Символы 10 и 34 — это перевод строки и двойная кавычка соответственно. Понадобилось вставить в прямом виде, чтобы при многократных запусках экранирование не сползало.</p>
+
+<p>Затем я решил добавить немного питона. Пользуясь статьёй на хабре.</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+void p(char * pdata, char * s) {
+  printf(pdata, 34, s, 34);
+}
+int main() {
+  char pdata [] = &quot;print(%c%s%c)&quot;;
+  char data [] = &quot;#include &lt;stdio.h&gt; %c void p(char * pdata, char *s) { printf(pdata, 34, s, 34); } int main() { char pdata [] = %c%s%c; char data [] = %c%s%c; printf(data, 10, 34, pdata, 34, 34, data, 34); return 0;}&quot;;
+  printf(data, 10, 34, pdata, 34, 34, data, 34);
+  return 0;
+}
+</code></pre>
+
+<p>Как я понял после запуска, я совсем забыл про питон %) И это тоже оказался просто C++→C++-квайнчик.</p>
+
+<p>После долгих и мучительных десятиминутных размышлений я выкинул метод <code>p()</code>, который генерирует питонокод, и влепил кусочки кода прямо в main.<br />
+Получилось так:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+  char ps [] = {92, 110, 0};    // %s
+  char pc [] = {92, 99, 0};     // %c
+  char k [] = {34, 0};          // &quot;
+  char pdata [] = &quot;print(%c%s%c)&quot;;
+  char data [] = &quot;#include &lt;stdio.h&gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&quot;;
+  char ndata [1000];
+  sprintf(ndata, data, ps, k, pdata, k, k, data, k);
+  printf(pdata, 39, ndata, 39);
+  return 0;
+}
+</code></pre>
+
+<p>Быдлокод, ага) Но работает.<br />
+Генерируемый этим кодом питонокод выглядит наипростейшим образом — печатает эту самую программу.</p>
+
+<pre><code class="language-python">print('#include &lt;stdio.h&gt; \n int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = &quot;print(%c%s%c)&quot;; char data [] = &quot;#include &lt;stdio.h&gt; %s int main() { char ps [] = {92, 110, 0}; char pc [] = {92, 99, 0}; char k [] = {34, 0}; char pdata [] = %s%s%s; char data [] = %s%s%s; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}&quot;; char ndata[1000]; sprintf(ndata, data, ps, k, pdata, k, k, data, k); printf(pdata, 39, ndata, 39); return 0;}')
+</code></pre>
+
+<p>P.S. Не обращайте внимания на комментарии в коде и переносы строк. Они после первых же компиляций исчезнут, а нужны просто для удобства чтения и кодинга.<br />
+P.P.S. Люто рекомендую книжку Д. Хофштадтера (того, в честь которого назвали Леонарда в ТБВ) &ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&rdquo;. Там есть немного про квайны и вообще автореференцию, но книжка интересна не квайнами))</p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '105 http:\/\/blog.xapienz.ru\/?p=105';
+    var disqus_title = 'Оу май квайн';
+    var disqus_url = '\/2013\/07\/30\/qui_ine\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2013/07/27/yet-another-music-player-whymusic/" rel="prev">Yet another music player: whyMusic</a></span>
+    
+    
+      <span class="next"><a href="../../../../2013/08/02/rotation/" rel="next">Вот это поворот</a> &rarr;</span>
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Нажать на &#34;закрытом&#34; экране в Android | привет, как дела?
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="../../../../2014/07/30/press-on-closed/"/>
+
+  
+  <link rel="stylesheet" href="../../../../css/sanitize.css">
+  <link rel="stylesheet" href="../../../../css/responsive.css">
+  <link rel="stylesheet" href="../../../../css/highlight_monokai.css">
+  <link rel="stylesheet" href="../../../../css/theme.css">
+  <link rel="stylesheet" href="../../../../css/custom.css">
+  
+  
+  <link href="index.xml" rel="alternate" type="application/rss+xml" title="привет, как дела?" />
+  <link href="index.xml" rel="feed" type="application/rss+xml" title="привет, как дела?" />
+
+  
+  
+
+
+</head>
+
+<body>
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="../../../../">привет, как дела?</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          
+        </ul>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Нажать на &#34;закрытом&#34; экране в Android</h1>
+      <div class="meta">
+        Jul 30, 2014 &nbsp;
+        
+          #<a href="../../../../tags/android">android</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Как вы думаете, возможно ли пользователем (то есть не программным вызовом метода, а именно собственным пальчиком) нажать на экране приложения, когда оно не считается активным, не ожидает ввода да и вообще потенциально считается закрытым?</p>
+
+<p>Занимаясь обработкой нажатий в Android, столкнулся с интересной проблемой.<br />
+Как известно, любая Activity проходит <a href="http://developer.android.com/guide/components/activities.html#Lifecycle">следующий жизненный цикл</a>: created → started → resumed → paused(=started) → stopped(=created) → destroyed.</p>
+
+<p>Иногда у программистов возникает непонимание, чем отличаются состояния paused и resumed (да и я не всегда могу сразу решить, какой из методов: onStart или onResume — лучше выбрать для написания какой-то части логики) и что может произойти во временном промежутке между этими состояниями (рассматривается именно случай перехода активности между состояниями, а не перекрытие её другими активностями, когда состояния становятся легко различимы). На самом деле на глаз эти состояния отличить легко. Например, при нажатии Home активити сворачивается и в процессе анимации сворачивания она уже paused, но ещё не stopped.</p>
+
+<p>Именно об этом процессе (не анимации, а переходе) сейчас и будет идти речь.</p>
+
+<p>Возможно (и скорее всего), описываемое ниже поведение является багом Android, но оно существует, поэтому с ним нужно мириться.</p>
+
+<p>Создадим проект с одной активностью, добавим в него ListView, создадим следующий обработчик нажатий на элемент:</p>
+
+<pre><code class="language-java">listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView&lt;?&gt; adapterView, View view, int i, long l) {
+        Log.d(TAG, &quot;onItemClick&quot;);
+    }
+});
+</code></pre>
+
+<p>Добавим обработчики колбеков активности onPause и onStop:</p>
+
+<pre><code class="language-java">@Override
+protected void onPause() {
+    super.onPause();
+    Log.d(TAG, &quot;onPause&quot;);
+}
+
+@Override
+protected void onStop() {
+    super.onStop();
+    Log.d(TAG, &quot;onStop&quot;);
+}
+</code></pre>
+
+<p>А теперь произведём следующие манипуляции: нажмём пальцем на любой элемент списка и не отпуская его свернём приложение кнопкой Home. В процессе анимации сворачивания отпустим палец.
+В логе появятся следующие строчки:</p>
+
+<pre><code class="language-java">onPause
+onItemClick
+onStop
+</code></pre>
+
+<p>Получилось, что пункт списка был нажат на экране, который не считается активным и не ожидает пользовательского ввода.</p>
+
+<p>Поэтому необходимо быть осторожным и не стоит полагаться на то, что активность ещё открыта, когда производится нажатие.<br />
+На этом всё.</p>
+
+<p>P.S. Это легко повторяется с нажатием на элементы списка, но не работает с нажатием на обычные кнопки.</p>
+
+      
+      
+      
+    </article>
+    
+    <aside><div id="disqus_thread"></div></aside>
+    <div class="comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'xapienz';
+    var disqus_identifier = '205 http:\/\/blog.xapienz.ru\/?p=205';
+    var disqus_title = 'Нажать на \x22закрытом\x22 экране в Android';
+    var disqus_url = '\/2014\/07\/30\/press-on-closed\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="../../../../2014/01/14/make-apklib/" rel="prev">Экспорт в apklib одной командой</a></span>
+    
+    
+  </nav>
+
+
+</div>
+
+
+<footer role="contentinfo">
+  <div style="text-align:center;">
+    
+    
+    Powered by <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/xcode.css">
+<style>.hljs{background: none}</style>
+<script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter = new Ya.Metrika({
+                    id: 22047451 ,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/22047451" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+
+
+</body>
+</html>
+
