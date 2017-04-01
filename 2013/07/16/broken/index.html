@@ -71,7 +71,8 @@
       <p>Пытаюсь с особыми важными целями сделать текстовое поле <a href="http://developer.android.com/reference/android/widget/AutoCompleteTextView.html">AutoCompleteTextView</a> нередактируемым.<br />
 Простой вариант - задание свойства <code>android:editable=&quot;false&quot;</code> - не работает. Оказывается, свойство <code>editable</code> уже давным-давно deprecated (<a href="http://developer.android.com/reference/android/R.attr.html#editable">пруф</a>) и поэтому не гарантируется его работоспособность.</p>
 
-<p>Ну что ж, печаль. Ищем, как нужно теперь это делать.</p>
+<p>Ну что ж, печаль. Ищем, как нужно теперь это делать.
+</p>
 
 <p>Правильным ответом является задание пустого способа ввода: <code>android:inputType=&quot;none&quot;</code>.  Это должно привести к тому, что компонент не даст в себя ввести текст.<br />
 На деле всё гораздо хуже: <a href="http://code.google.com/p/android/issues/detail?id=2854">http://code.google.com/p/android/issues/detail?id=2854</a></p>
@@ -85,7 +86,6 @@
 <p>Будем обходиться костылями.</p>
 
 <p><object width="350" height="48"><param name="muz" value="http://music.yandex.ru/embed/606875/track.swf"/><param value="noscale" name="scale"/><param value="bg-color=%23F2F2F2&amp;text-color=%23777777&amp;hover-text-color=%23000000" name="flashvars"/><embed type="application/x-shockwave-flash" width="350" height="48" scale="noscale" flashvars="bg-color=%23F2F2F2&amp;text-color=%23777777&amp;hover-text-color=%23000000" src="http://music.yandex.ru/embed/606875/track.swf"/></object><div style="font-size: 11px; margin-top: 3px"><a href="http://music.yandex.ru/artist/41168">Лампасы</a> — <a href="http://music.yandex.ru/track/606875/album/64726">Лягушки</a> на <a href="http://music.yandex.ru">Яндекс.Музыке</a></div></p>
-
       
       
       

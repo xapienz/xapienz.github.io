@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Fira Code";
+    src: url(https://cdn.rawgit.com/tonsky/FiraCode/master/distr/ttf/FiraCode-Regular.ttf) format("truetype");
+}
+
 body {
   background-color: #f4f4f4;
   font-family: sans-serif;
@@ -196,12 +201,12 @@ article code {
   padding: 0 3px;
   margin: 0 3px;
   border: 1px solid #ccc;
-  font-family: consolas, monospace;
+  font-family: "Fira Code", consolas, monospace;
   line-height: 1.3em;
   white-space: pre-wrap;
 }
 article pre code {
-  font-family: consolas, monospace;
+  font-family: "Fira Code", consolas, monospace;
   line-height: 1.3em;
 }
 article blockquote {

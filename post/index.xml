@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on привет, как дела?</title>
-    <link>/post/</link>
+    <link>/post/index.xml</link>
     <description>Recent content in Posts on привет, как дела?</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-RU</language>
@@ -16,6 +16,8 @@
       
       <guid>/2014/07/30/press-on-closed/</guid>
       <description>&lt;p&gt;Как вы думаете, возможно ли пользователем (то есть не программным вызовом метода, а именно собственным пальчиком) нажать на экране приложения, когда оно не считается активным, не ожидает ввода да и вообще потенциально считается закрытым?&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;Занимаясь обработкой нажатий в Android, столкнулся с интересной проблемой.&lt;br /&gt;
 Как известно, любая Activity проходит &lt;a href=&#34;http://developer.android.com/guide/components/activities.html#Lifecycle&#34;&gt;следующий жизненный цикл&lt;/a&gt;: created → started → resumed → paused(=started) → stopped(=created) → destroyed.&lt;/p&gt;
@@ -64,8 +66,7 @@ onStop
 &lt;p&gt;Поэтому необходимо быть осторожным и не стоит полагаться на то, что активность ещё открыта, когда производится нажатие.&lt;br /&gt;
 На этом всё.&lt;/p&gt;
 
-&lt;p&gt;P.S. Это легко повторяется с нажатием на элементы списка, но не работает с нажатием на обычные кнопки.&lt;/p&gt;
-</description>
+&lt;p&gt;P.S. Это легко повторяется с нажатием на элементы списка, но не работает с нажатием на обычные кнопки.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -81,7 +82,8 @@ fi
 zip -9 ${PWD##*/}.apklib -r libs src res \
     AndroidManifest.xml build.xml build.gradle project.properties
 &lt;/code&gt;&lt;/pre&gt;
-</description>
+
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -94,6 +96,8 @@ zip -9 ${PWD##*/}.apklib -r libs src res \
 
 &lt;p&gt;Type erasure (стирание типов) в Java — это такой однажды вставленный в язык костыль для поддержки generics — параметризации типов у классов/методов. Нужен он был для совместимости байткода с предыдущими версиями Java, а заключается он в том, что проверка на соответствие типов данных в generics производится исключительно во время компиляции, а не во время выполнения.&lt;br /&gt;
 Из этого следует то, что можно обхитрить систему во время компиляции и попробовать этим воспользоваться для запутывания самих себя в рантайме.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;Итак, код.&lt;/p&gt;
 
@@ -137,8 +141,7 @@ hello
 ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;
-</description>
+&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -154,6 +157,8 @@ hello
 &lt;p&gt;&lt;strong&gt;Что это и как:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;переносим мышкой файл на значок, получаем ссылку, копируем её, куда хотим.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Техническая сторона:&lt;/strong&gt;&lt;/p&gt;
 
@@ -210,8 +215,7 @@ kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&a
 
 &lt;ul&gt;
 &lt;li&gt;если файл большой и находится не в каталоге яндекс.диска, то можно ждать появления ссылки очень долго.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -245,7 +249,8 @@ System.out.println(when2.getTime());
 
 &lt;p&gt;Краткое описание: создаём объект календаря с 14 августа 2013 года, дважды его клонируем, в двух клонах меняем таймзону на UTC и выводим полученное.&lt;/p&gt;
 
-&lt;p&gt;Что же он выведет на экран?&lt;/p&gt;
+&lt;p&gt;Что же он выведет на экран?
+&lt;/p&gt;
 
 &lt;p&gt;Вот что:&lt;/p&gt;
 
@@ -267,8 +272,7 @@ Wed Aug 14 00:00:00 MSK 2013
 
 &lt;p&gt;А вот то, что из-за вызова clone() потерялась некоторая информация о том, что было изменено и не пересчиталось — баг :)&lt;/p&gt;
 
-&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;
-</description>
+&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -277,8 +281,8 @@ Wed Aug 14 00:00:00 MSK 2013
       <pubDate>Mon, 16 Sep 2013 14:10:15 +0600</pubDate>
       
       <guid>/2013/09/16/8cat/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;../img/putin.png&#34;&gt;&lt;img src=&#34;../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>&lt;p&gt;&lt;a href=&#34;../img/putin.png&#34;&gt;&lt;img src=&#34;../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -289,7 +293,8 @@ Wed Aug 14 00:00:00 MSK 2013
       <guid>/2013/08/13/tldr/</guid>
       <description>&lt;p&gt;Разные контейнеры/коллекции разных объектов имеют разные интерфейсы доступа. Это нормально. Но часто в произвольный момент можно позабыть, какой из методов необходимо использовать для узнавания количества элементов, содержащихся в этом нечто.&lt;/p&gt;
 
-&lt;p&gt;Итак, поехали.&lt;/p&gt;
+&lt;p&gt;Итак, поехали.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Простой массив&lt;/strong&gt;&lt;/p&gt;
 
@@ -330,8 +335,7 @@ int length = Array.getLength(array);
 &lt;p&gt;В общем, если погуглить и постараться, то список можно продолжать =)&lt;br /&gt;
 Найдутся length, size, count в разных комбинациях с префиксом get и без.&lt;/p&gt;
 
-&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;
-</description>
+&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -346,7 +350,8 @@ int length = Array.getLength(array);
 
 &lt;p&gt;Однако приложений для прошивки хоть и два, но они оба для ОС Windows (это RKAndroidTool и Rockchip Batch Tool). Раньше в таких случаях я выполнял обновление firmware из виртуалки — VirtualBox с запущенной WinXP, но это неинтересно).&lt;/p&gt;
 
-&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.&lt;/p&gt;
+&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Итак, что имеется со стороны автора прошивки&lt;/strong&gt;:&lt;/p&gt;
 
@@ -426,8 +431,7 @@ int length = Array.getLength(array);
 
 &lt;ol&gt;
 &lt;li&gt;Google&lt;/li&gt;
-&lt;/ol&gt;
-</description>
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -448,8 +452,8 @@ int length = Array.getLength(array);
 И паранойя)&lt;/p&gt;
 
 &lt;p&gt;UPD: статистика вордпресса мне как бы намекнула, что автор статьи на хабре ко мне заходил)&lt;br /&gt;
-Привет, &lt;a href=&#34;http://habrahabr.ru/users/gromozeka1980/&#34;&gt;gromozeka1980&lt;/a&gt;! :)&lt;/p&gt;
-</description>
+Привет, &lt;a href=&#34;http://habrahabr.ru/users/gromozeka1980/&#34;&gt;gromozeka1980&lt;/a&gt;! :)
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -465,7 +469,8 @@ int length = Array.getLength(array);
 
 &lt;p&gt;Для тех, кто не в курсе. Квайн — это программа, которая пишет саму себя. Ну или более сложный случай: пишет другую программу на другом языке, которая тоже запускается и пишет ещё какую-то программу. И так далее. В итоге можно когда-то вернуться к исходному коду.&lt;/p&gt;
 
-&lt;p&gt;Первым делом я осилил свой квайн на C++. Он простой.&lt;/p&gt;
+&lt;p&gt;Первым делом я осилил свой квайн на C++. Он простой.
+&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;stdio.h&amp;gt; 
 int main() {
@@ -517,8 +522,7 @@ int main() {
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;P.S. Не обращайте внимания на комментарии в коде и переносы строк. Они после первых же компиляций исчезнут, а нужны просто для удобства чтения и кодинга.&lt;br /&gt;
-P.P.S. Люто рекомендую книжку Д. Хофштадтера (того, в честь которого назвали Леонарда в ТБВ) &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;. Там есть немного про квайны и вообще автореференцию, но книжка интересна не квайнами))&lt;/p&gt;
-</description>
+P.P.S. Люто рекомендую книжку Д. Хофштадтера (того, в честь которого назвали Леонарда в ТБВ) &amp;ldquo;Гёдель, Эшер, Бах: эта бесконечная гирлянда&amp;rdquo;. Там есть немного про квайны и вообще автореференцию, но книжка интересна не квайнами))&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -530,7 +534,8 @@ P.P.S. Люто рекомендую книжку Д. Хофштадтера (т
       <description>&lt;p&gt;Написал свой нескучный кроссплатформенный музыкальный плеер - whyMusic.&lt;/p&gt;
 
 &lt;p&gt;Плеер — всего лишь обёртка над webview, в котором открыт сайт музыкального сервиса. Написан на Qt 4. Но можно снаружи (читай: глобальными хоткеями/командами) дёргать за кнопки &amp;ldquo;play&amp;rdquo;, &amp;ldquo;назад&amp;rdquo;, &amp;ldquo;вперёд&amp;rdquo;.&lt;br /&gt;
-Изначально задумывался как оболочка над Яндекс.Музыкой, но теперь он стал мультисервисным — сегодня я just for fun добавил поддержку Jamendo.&lt;/p&gt;
+Изначально задумывался как оболочка над Яндекс.Музыкой, но теперь он стал мультисервисным — сегодня я just for fun добавил поддержку Jamendo.
+&lt;/p&gt;
 
 &lt;p&gt;Как работает:&lt;/p&gt;
 
@@ -565,8 +570,7 @@ play
 &lt;p&gt;Скриншот вот:&lt;br /&gt;
 &lt;a href=&#34;../img/shot29.png&#34;&gt;&lt;img src=&#34;../img/shot29-300x225.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Бинарники для разных платформ будут потом, когда руки дойдут :)&lt;/p&gt;
-</description>
+&lt;p&gt;Бинарники для разных платформ будут потом, когда руки дойдут :)&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -581,7 +585,8 @@ play
 
 &lt;p&gt;Теперь же захотелось иметь несколько версий одного приложения на устройстве и переключаться между ними. Разработчики поймут.&lt;/p&gt;
 
-&lt;p&gt;Представляю вниманию читателей mAPK (multi-APK).&lt;/p&gt;
+&lt;p&gt;Представляю вниманию читателей mAPK (multi-APK).
+&lt;/p&gt;
 
 &lt;p&gt;Приложение представляет собой простой список установленных приложений (за исключением помеченных как системные). Напротив каждого приложения две кнопки: &amp;ldquo;сохранить&amp;rdquo; и &amp;ldquo;загрузить&amp;rdquo;.&lt;/p&gt;
 
@@ -598,8 +603,7 @@ play
 &lt;p&gt;Замечания и пожелания приветствуются.&lt;br /&gt;
 Ссылка: &lt;a href=&#34;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&#34;&gt;https://play.google.com/store/apps/details?id=ru.xapienz.mapk&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;P.S. Если непонятно, нужно ли это Вам, то значит, что не нужно.&lt;/p&gt;
-</description>
+&lt;p&gt;P.S. Если непонятно, нужно ли это Вам, то значит, что не нужно.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -611,7 +615,8 @@ play
       <description>&lt;p&gt;Пытаюсь с особыми важными целями сделать текстовое поле &lt;a href=&#34;http://developer.android.com/reference/android/widget/AutoCompleteTextView.html&#34;&gt;AutoCompleteTextView&lt;/a&gt; нередактируемым.&lt;br /&gt;
 Простой вариант - задание свойства &lt;code&gt;android:editable=&amp;quot;false&amp;quot;&lt;/code&gt; - не работает. Оказывается, свойство &lt;code&gt;editable&lt;/code&gt; уже давным-давно deprecated (&lt;a href=&#34;http://developer.android.com/reference/android/R.attr.html#editable&#34;&gt;пруф&lt;/a&gt;) и поэтому не гарантируется его работоспособность.&lt;/p&gt;
 
-&lt;p&gt;Ну что ж, печаль. Ищем, как нужно теперь это делать.&lt;/p&gt;
+&lt;p&gt;Ну что ж, печаль. Ищем, как нужно теперь это делать.
+&lt;/p&gt;
 
 &lt;p&gt;Правильным ответом является задание пустого способа ввода: &lt;code&gt;android:inputType=&amp;quot;none&amp;quot;&lt;/code&gt;.  Это должно привести к тому, что компонент не даст в себя ввести текст.&lt;br /&gt;
 На деле всё гораздо хуже: &lt;a href=&#34;http://code.google.com/p/android/issues/detail?id=2854&#34;&gt;http://code.google.com/p/android/issues/detail?id=2854&lt;/a&gt;&lt;/p&gt;
@@ -624,8 +629,7 @@ play
 
 &lt;p&gt;Будем обходиться костылями.&lt;/p&gt;
 
-&lt;p&gt;&lt;object width=&#34;350&#34; height=&#34;48&#34;&gt;&lt;param name=&#34;muz&#34; value=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;param value=&#34;noscale&#34; name=&#34;scale&#34;/&gt;&lt;param value=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; name=&#34;flashvars&#34;/&gt;&lt;embed type=&#34;application/x-shockwave-flash&#34; width=&#34;350&#34; height=&#34;48&#34; scale=&#34;noscale&#34; flashvars=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; src=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;/object&gt;&lt;div style=&#34;font-size: 11px; margin-top: 3px&#34;&gt;&lt;a href=&#34;http://music.yandex.ru/artist/41168&#34;&gt;Лампасы&lt;/a&gt; — &lt;a href=&#34;http://music.yandex.ru/track/606875/album/64726&#34;&gt;Лягушки&lt;/a&gt; на &lt;a href=&#34;http://music.yandex.ru&#34;&gt;Яндекс.Музыке&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;object width=&#34;350&#34; height=&#34;48&#34;&gt;&lt;param name=&#34;muz&#34; value=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;param value=&#34;noscale&#34; name=&#34;scale&#34;/&gt;&lt;param value=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; name=&#34;flashvars&#34;/&gt;&lt;embed type=&#34;application/x-shockwave-flash&#34; width=&#34;350&#34; height=&#34;48&#34; scale=&#34;noscale&#34; flashvars=&#34;bg-color=%23F2F2F2&amp;amp;text-color=%23777777&amp;amp;hover-text-color=%23000000&#34; src=&#34;http://music.yandex.ru/embed/606875/track.swf&#34;/&gt;&lt;/object&gt;&lt;div style=&#34;font-size: 11px; margin-top: 3px&#34;&gt;&lt;a href=&#34;http://music.yandex.ru/artist/41168&#34;&gt;Лампасы&lt;/a&gt; — &lt;a href=&#34;http://music.yandex.ru/track/606875/album/64726&#34;&gt;Лягушки&lt;/a&gt; на &lt;a href=&#34;http://music.yandex.ru&#34;&gt;Яндекс.Музыке&lt;/a&gt;&lt;/div&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -637,7 +641,8 @@ play
       <description>&lt;p&gt;Disclaimer: все действия я проводил год назад на планшете Sanei N10. На других планшетах может что-то не работать.&lt;/p&gt;
 
 &lt;p&gt;Необходимо, чтобы были доступны исходники именно того ядра, которое установлено на устройство. Также нужна поддержка USB OTG (USB Host).&lt;br /&gt;
-Я проводил действия на прошивке CyanogenMod.&lt;/p&gt;
+Я проводил действия на прошивке CyanogenMod.
+&lt;/p&gt;
 
 &lt;p&gt;Для работы usb-модема нужна поддержка устройств CDC (Communications Device Class) ACM (Abstract Control Model). Для этого нужен включенный в ядро модуль cdc_acm. Обычно он отключен или его нет вовсе.&lt;/p&gt;
 
@@ -670,8 +675,7 @@ make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep &#39;processor&#39; /proc/cpuinfo
 &lt;li&gt;&lt;p&gt;Вставляем модем, заходим в Настройки - Беспроводные сети - Ещё&amp;hellip; - Ethernet. Ставим галочку &amp;ldquo;Use Ethernet&amp;rdquo;. Имеем интернет.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;
-</description>
+&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -680,7 +684,8 @@ make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep &#39;processor&#39; /proc/cpuinfo
       <pubDate>Tue, 09 Jul 2013 18:00:00 +0600</pubDate>
       
       <guid>/2013/07/09/dontcalloverridable/</guid>
-      <description>&lt;p&gt;Эту штуку я слышал уже много раз, однако только сейчас напрямую с этим столкнулся.&lt;/p&gt;
+      <description>&lt;p&gt;Эту штуку я слышал уже много раз, однако только сейчас напрямую с этим столкнулся.
+&lt;/p&gt;
 
 &lt;p&gt;Захотел я унаследовать EditText, чтобы реализовать в нём свои супер-пупер-киллер-фичи.&lt;br /&gt;
 Перегрузил в нём метод onTextChanged, чтобы показывать иконку-крестик при наличии текста и скрывать её при отсутствии. В нём я обращаюсь к созданному прямо в классе массиву:&lt;/p&gt;
@@ -711,8 +716,7 @@ at android.widget.EditText.(EditText.java:74)
 &lt;p&gt;Всё почему? Всё потому, что я попытался прочитать неинициализированное поле класса. А почему оно не инициализировано? А потому что ещё не закончился вызов конструктора суперкласса.&lt;br /&gt;
 Такая грусть-пичаль.&lt;/p&gt;
 
-&lt;p&gt;Поэтому не надо доверять коду ребят из гугла, они тоже создают потенциальные проблемы, которые мне приходится обходить лишними &lt;code&gt;if(... != null) {...}&lt;/code&gt; в местах, где, казалось бы, null быть не должен.&lt;/p&gt;
-</description>
+&lt;p&gt;Поэтому не надо доверять коду ребят из гугла, они тоже создают потенциальные проблемы, которые мне приходится обходить лишними &lt;code&gt;if(... != null) {...}&lt;/code&gt; в местах, где, казалось бы, null быть не должен.&lt;/p&gt;</description>
     </item>
     
   </channel>

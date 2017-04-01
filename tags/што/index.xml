@@ -2,11 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Што on привет, как дела?</title>
-    <link>/tags/%D1%88%D1%82%D0%BE/</link>
+    <link>/tags/%D1%88%D1%82%D0%BE/index.xml</link>
     <description>Recent content in Што on привет, как дела?</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-RU</language>
-    <lastBuildDate>Wed, 18 Sep 2013 22:10:25 +0600</lastBuildDate>
     <atom:link href="/tags/%D1%88%D1%82%D0%BE/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
@@ -40,7 +39,8 @@ System.out.println(when2.getTime());
 
 &lt;p&gt;Краткое описание: создаём объект календаря с 14 августа 2013 года, дважды его клонируем, в двух клонах меняем таймзону на UTC и выводим полученное.&lt;/p&gt;
 
-&lt;p&gt;Что же он выведет на экран?&lt;/p&gt;
+&lt;p&gt;Что же он выведет на экран?
+&lt;/p&gt;
 
 &lt;p&gt;Вот что:&lt;/p&gt;
 
@@ -62,8 +62,7 @@ Wed Aug 14 00:00:00 MSK 2013
 
 &lt;p&gt;А вот то, что из-за вызова clone() потерялась некоторая информация о том, что было изменено и не пересчиталось — баг :)&lt;/p&gt;
 
-&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;
-</description>
+&lt;p&gt;Вывод. Использование Calendar.clone() — зло.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -72,8 +71,8 @@ Wed Aug 14 00:00:00 MSK 2013
       <pubDate>Mon, 16 Sep 2013 14:10:15 +0600</pubDate>
       
       <guid>/2013/09/16/8cat/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;../../img/putin.png&#34;&gt;&lt;img src=&#34;../../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>&lt;p&gt;&lt;a href=&#34;../../img/putin.png&#34;&gt;&lt;img src=&#34;../../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -90,8 +89,8 @@ Wed Aug 14 00:00:00 MSK 2013
 
 &lt;p&gt;via &lt;a href=&#34;http://developer.android.com/reference/android/widget/AdapterViewFlipper.html&#34;&gt;http://developer.android.com/reference/android/widget/AdapterViewFlipper.html&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Называется, решил добавить свайп постов в ленточку)&lt;/p&gt;
-</description>
+&lt;p&gt;Называется, решил добавить свайп постов в ленточку)
+&lt;/p&gt;</description>
     </item>
     
   </channel>

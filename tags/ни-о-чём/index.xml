@@ -2,11 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ни О Чём on привет, как дела?</title>
-    <link>/tags/%D0%BD%D0%B8-%D0%BE-%D1%87%D1%91%D0%BC/</link>
+    <link>/tags/%D0%BD%D0%B8-%D0%BE-%D1%87%D1%91%D0%BC/index.xml</link>
     <description>Recent content in Ни О Чём on привет, как дела?</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-RU</language>
-    <lastBuildDate>Sun, 01 Dec 2013 00:53:42 +0600</lastBuildDate>
     <atom:link href="/tags/%D0%BD%D0%B8-%D0%BE-%D1%87%D1%91%D0%BC/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
@@ -19,6 +18,8 @@
 
 &lt;p&gt;Type erasure (стирание типов) в Java — это такой однажды вставленный в язык костыль для поддержки generics — параметризации типов у классов/методов. Нужен он был для совместимости байткода с предыдущими версиями Java, а заключается он в том, что проверка на соответствие типов данных в generics производится исключительно во время компиляции, а не во время выполнения.&lt;br /&gt;
 Из этого следует то, что можно обхитрить систему во время компиляции и попробовать этим воспользоваться для запутывания самих себя в рантайме.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;Итак, код.&lt;/p&gt;
 
@@ -62,8 +63,7 @@ hello
 ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;
-</description>
+&lt;p&gt;Всё, что &lt;del&gt;быдлокодер&lt;/del&gt; программист указал в угловых скобках, оказалось утеряно и недоступно на этапе выполнения.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -72,8 +72,8 @@ hello
       <pubDate>Mon, 16 Sep 2013 14:10:15 +0600</pubDate>
       
       <guid>/2013/09/16/8cat/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;../../img/putin.png&#34;&gt;&lt;img src=&#34;../../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>&lt;p&gt;&lt;a href=&#34;../../img/putin.png&#34;&gt;&lt;img src=&#34;../../img/putin-300x300.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -84,7 +84,8 @@ hello
       <guid>/2013/08/13/tldr/</guid>
       <description>&lt;p&gt;Разные контейнеры/коллекции разных объектов имеют разные интерфейсы доступа. Это нормально. Но часто в произвольный момент можно позабыть, какой из методов необходимо использовать для узнавания количества элементов, содержащихся в этом нечто.&lt;/p&gt;
 
-&lt;p&gt;Итак, поехали.&lt;/p&gt;
+&lt;p&gt;Итак, поехали.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Простой массив&lt;/strong&gt;&lt;/p&gt;
 
@@ -125,8 +126,7 @@ int length = Array.getLength(array);
 &lt;p&gt;В общем, если погуглить и постараться, то список можно продолжать =)&lt;br /&gt;
 Найдутся length, size, count в разных комбинациях с префиксом get и без.&lt;/p&gt;
 
-&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;
-</description>
+&lt;p&gt;Это всё учить и запоминать не надо. В нужные моменты само вспомнится, в ненужные IDE спасёт подсказкой.&lt;/p&gt;</description>
     </item>
     
   </channel>

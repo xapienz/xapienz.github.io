@@ -2,11 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on привет, как дела?</title>
-    <link>/tags/linux/</link>
+    <link>/tags/linux/index.xml</link>
     <description>Recent content in Linux on привет, как дела?</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru-RU</language>
-    <lastBuildDate>Tue, 14 Jan 2014 16:35:32 +0600</lastBuildDate>
     <atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
@@ -22,7 +21,8 @@ fi
 zip -9 ${PWD##*/}.apklib -r libs src res \
     AndroidManifest.xml build.xml build.gradle project.properties
 &lt;/code&gt;&lt;/pre&gt;
-</description>
+
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -38,6 +38,8 @@ zip -9 ${PWD##*/}.apklib -r libs src res \
 &lt;p&gt;&lt;strong&gt;Что это и как:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;переносим мышкой файл на значок, получаем ссылку, копируем её, куда хотим.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Техническая сторона:&lt;/strong&gt;&lt;/p&gt;
 
@@ -94,8 +96,7 @@ kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&a
 
 &lt;ul&gt;
 &lt;li&gt;если файл большой и находится не в каталоге яндекс.диска, то можно ждать появления ссылки очень долго.&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -110,7 +111,8 @@ kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&a
 
 &lt;p&gt;Однако приложений для прошивки хоть и два, но они оба для ОС Windows (это RKAndroidTool и Rockchip Batch Tool). Раньше в таких случаях я выполнял обновление firmware из виртуалки — VirtualBox с запущенной WinXP, но это неинтересно).&lt;/p&gt;
 
-&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.&lt;/p&gt;
+&lt;p&gt;Все действия выполнялись для &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=458533&amp;amp;st=300#entry22298604&#34;&gt;прошивки от ImaSoft&lt;/a&gt;, для простого обновления системы все действия намного проще. Главная сложность процесса в моей ситуации — требуется увеличенный системный раздел, так как в стандартную область системы эти прошивки не влезают.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Итак, что имеется со стороны автора прошивки&lt;/strong&gt;:&lt;/p&gt;
 
@@ -190,8 +192,7 @@ kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&a
 
 &lt;ol&gt;
 &lt;li&gt;Google&lt;/li&gt;
-&lt;/ol&gt;
-</description>
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -203,7 +204,8 @@ kdialog --inputbox &amp;quot;$src&amp;quot; &amp;quot;$dest&amp;quot; &amp;gt;&a
       <description>&lt;p&gt;Disclaimer: все действия я проводил год назад на планшете Sanei N10. На других планшетах может что-то не работать.&lt;/p&gt;
 
 &lt;p&gt;Необходимо, чтобы были доступны исходники именно того ядра, которое установлено на устройство. Также нужна поддержка USB OTG (USB Host).&lt;br /&gt;
-Я проводил действия на прошивке CyanogenMod.&lt;/p&gt;
+Я проводил действия на прошивке CyanogenMod.
+&lt;/p&gt;
 
 &lt;p&gt;Для работы usb-модема нужна поддержка устройств CDC (Communications Device Class) ACM (Abstract Control Model). Для этого нужен включенный в ядро модуль cdc_acm. Обычно он отключен или его нет вовсе.&lt;/p&gt;
 
@@ -236,8 +238,7 @@ make ARCH=arm CROSS_COMPILE=$CCOMPILER -j`grep &#39;processor&#39; /proc/cpuinfo
 &lt;li&gt;&lt;p&gt;Вставляем модем, заходим в Настройки - Беспроводные сети - Ещё&amp;hellip; - Ethernet. Ставим галочку &amp;ldquo;Use Ethernet&amp;rdquo;. Имеем интернет.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;
-</description>
+&lt;p&gt;Оригинальный пост за моим авторством здесь: &lt;a href=&#34;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;amp;view=findpost&amp;amp;amp;p=14150947&#34;&gt;http://4pda.ru/forum/index.php?showtopic=353811&amp;amp;view=findpost&amp;amp;p=14150947&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>
